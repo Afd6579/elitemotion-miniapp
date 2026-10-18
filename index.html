@@ -138,7 +138,7 @@
       await loadTonConnectSdk();
       tonUi = new window.TON_CONNECT_UI.TonConnectUI({
         manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
-        buttonRootId: "ton-connect-native",
+        buttonRootId: null,
         uiPreferences: { theme: "DARK" }
       });
       tonUi.onStatusChange(wallet => {
@@ -159,8 +159,9 @@
       walletStatus.textContent = "در حال آماده‌سازی اتصال...";
       try {
         const ui = await ensureTonConnect();
-        walletStatus.textContent = "ابزار آماده است. اکنون دکمه رسمی TON Connect را بزن.";
-        // Do not call openModal here; the library's own button controls its modal.
+        walletStatus.textContent = "در حال باز کردن پنجره انتخاب کیف پول...";
+        await ui.openModal();
+        walletStatus.textContent = "پنجره اتصال باز شد؛ Tonkeeper را انتخاب کن. هیچ پرداختی انجام نمی‌شود.";
       } catch (error) {
         walletStatus.textContent = "خطای اتصال: " + (error && error.message ? error.message : "بارگذاری ناموفق بود.");
       } finally {
