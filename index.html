@@ -38,6 +38,7 @@
     .buyrow{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:12px}
     .price{font-size:12px;font-weight:bold}
     .buy{background:var(--red);color:white;border:0;border-radius:8px;padding:9px 10px;font-size:11px;font-weight:bold}
+    #ton-connect{margin-top:10px}
     .notice{margin-top:20px;border:1px solid var(--line);border-radius:14px;padding:13px;color:var(--muted);font-size:11px;line-height:1.6}
     footer{text-align:center;color:#686868;font-size:10px;letter-spacing:2px;padding:25px 0 0}
     @media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wrap{padding-top:32px}}
@@ -49,6 +50,12 @@
       <div><div class="brand">ELITE<span>MOTION</span></div><div class="tag">DRIVE BEYOND ORDINARY</div></div>
       <div class="pill">DIGITAL ARTWORK</div>
     </header>
+    <section class="notice" id="wallet-section" style="margin-bottom:18px">
+      <strong style="color:#eee">TON Connect · Mainnet</strong>
+      <p id="wallet-status" style="margin:8px 0;color:var(--muted)">اتصال کیف پول هنوز انجام نشده است.</p>
+      <div id="ton-connect"></div>
+      <p style="font-size:10px;margin-bottom:0">این مرحله فقط اتصال کیف پول را آزمایش می‌کند؛ هیچ تراکنشی ارسال نمی‌شود.</p>
+    </section>
     <section class="hero">
       <div class="eyebrow">AUTOMOTIVE VISUALS / COLLECTION 01</div>
       <h1>Make your wall<br>move.</h1>
@@ -78,9 +85,38 @@
      <div id="detail-message" class="notice" hidden role="status" aria-live="polite"></div>
 <footer>ELITEMOTION · DRIVE BEYOND ORDINARY</footer>
   </main>
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
   <script>
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor("#090909"); tg.setBackgroundColor("#090909"); } catch (_) {} }
+    const walletStatus = document.getElementById("wallet-status");
+    if (window.TON_CONNECT_UI && document.getElementById("ton-connect")) {
+      try {
+        const tonUi = new TON_CONNECT_UI.TonConnectUI({
+          manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
+          buttonRootId: "ton-connect"
+        });
+        tonUi.uiOptions = {
+          language: "en",
+          uiPreferences: { theme: TON_CONNECT_UI.THEME.DARK }
+        };
+        tonUi.onStatusChange(wallet => {
+          if (!wallet) {
+            walletStatus.textContent = "کیف پول متصل نیست. برای آزمایش، روی Connect Wallet بزن.";
+            return;
+          }
+          const address = wallet.account.address || "";
+          const shortAddress = address.length > 16 ? address.slice(0, 8) + "…" + address.slice(-6) : address;
+          const networkLabel = wallet.account.chain === "-239" ? "Mainnet" : (wallet.account.chain === "-3" ? "Testnet" : "شبکه نامشخص");
+          walletStatus.textContent = "کیف پول متصل شد: " + shortAddress + " · " + networkLabel + ". پرداخت هنوز غیرفعال است.";
+        });
+      } catch (error) {
+        walletStatus.textContent = "اتصال TON Connect آماده نشد. لطفاً صفحه را دوباره بارگذاری کن.";
+      }
+    } else {
+      walletStatus.textContent = "کتابخانه TON Connect بارگذاری نشد؛ اتصال در حال حاضر در دسترس نیست.";
+    }
+
     const filters = document.querySelectorAll(".filter");
     const cards = document.querySelectorAll(".card");
     filters.forEach(btn => btn.addEventListener("click", () => {
