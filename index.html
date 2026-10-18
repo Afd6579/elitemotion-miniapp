@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#090909">
+  <title>ELITEMOTION Store</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{color-scheme:dark;--bg:#090909;--panel:#141414;--line:#292929;--text:#f5f5f5;--muted:#a7a7a7;--red:#d71920;--gold:#b99a55}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at top,#1a1a1a 0%,var(--bg) 55%);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+    .wrap{max-width:760px;margin:auto;padding:22px 16px 40px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
+    .brand{font-size:20px;letter-spacing:3px;font-weight:800}.brand span{color:var(--gold)}
+    .tag{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:5px}
+    .pill{border:1px solid #493a1e;color:var(--gold);padding:8px 10px;border-radius:999px;font-size:11px;white-space:nowrap}
+    .hero{padding:24px 20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,#181818,#0c0c0c);margin-bottom:22px}
+    .eyebrow{font-size:10px;letter-spacing:3px;color:var(--red);font-weight:bold}
+    h1{font-size:clamp(27px,7vw,42px);line-height:1.04;margin:12px 0}
+    .hero p{color:var(--muted);font-size:14px;line-height:1.6;margin:0;max-width:460px}
+    .section-head{display:flex;justify-content:space-between;align-items:end;margin:24px 0 12px}
+    h2{font-size:17px;margin:0}.count{font-size:11px;color:var(--muted)}
+    .filters{display:flex;gap:8px;overflow:auto;padding-bottom:4px;margin-bottom:14px}
+    .filter{background:#111;border:1px solid var(--line);color:#ddd;border-radius:999px;padding:9px 13px;font-size:12px;white-space:nowrap}
+    .filter.active{background:#251719;border-color:var(--red);color:#fff}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .card{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+    .art{aspect-ratio:4/5;background:linear-gradient(145deg,#292929,#101010);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+    .art:before{content:"";position:absolute;width:80%;height:42%;border:1px solid #444;transform:skewY(-20deg);border-radius:50%;opacity:.45}
+    .art .car{font-size:40px;filter:grayscale(1);z-index:1}
+    .art .stamp{position:absolute;left:10px;top:10px;font-size:9px;letter-spacing:2px;color:var(--gold);border:1px solid #6a5731;padding:5px 7px;border-radius:3px}
+    .art .placeholder{position:absolute;bottom:10px;right:10px;font-size:8px;letter-spacing:1px;color:#777}
+    .info{padding:12px}
+    .code{font-size:9px;letter-spacing:1.6px;color:var(--gold)}
+    .name{font-size:14px;font-weight:700;margin:7px 0 5px}
+    .desc{font-size:11px;color:var(--muted);line-height:1.4;min-height:30px}
+    .buyrow{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:12px}
+    .price{font-size:12px;font-weight:bold}
+    .buy{background:var(--red);color:white;border:0;border-radius:8px;padding:9px 10px;font-size:11px;font-weight:bold}
+    .notice{margin-top:20px;border:1px solid var(--line);border-radius:14px;padding:13px;color:var(--muted);font-size:11px;line-height:1.6}
+    footer{text-align:center;color:#686868;font-size:10px;letter-spacing:2px;padding:25px 0 0}
+    @media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wrap{padding-top:32px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div><div class="brand">ELITE<span>MOTION</span></div><div class="tag">DRIVE BEYOND ORDINARY</div></div>
+      <div class="pill">DIGITAL ARTWORK</div>
+    </header>
+    <section class="hero">
+      <div class="eyebrow">AUTOMOTIVE VISUALS / COLLECTION 01</div>
+      <h1>Make your wall<br>move.</h1>
+      <p>Premium digital automotive posters. Carefully curated visuals for enthusiasts, collectors and modern spaces.</p>
+    </section>
+    <div class="section-head"><h2>Featured posters</h2><span class="count" id="count">03 ITEMS</span></div>
+    <nav class="filters" aria-label="Collections">
+      <button class="filter active" data-filter="all">All posters</button>
+      <button class="filter" data-filter="black-gold">Black &amp; Gold</button>
+      <button class="filter" data-filter="black-white">Black &amp; White</button>
+    </nav>
+    <section class="grid" id="products">
+      <article class="card" data-collection="black-gold">
+        <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◆</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
+        <div class="info"><div class="code">EM-BG-001</div><div class="name">Mansory Edition</div><div class="desc">Cinematic custom automotive artwork.</div><div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BG-001">Details</button></div></div>
+      </article>
+      <article class="card" data-collection="black-white">
+        <div class="art"><span class="stamp">BLACK &amp; WHITE</span><span class="car">◈</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
+        <div class="info"><div class="code">EM-BW-001</div><div class="name">AMG Performance</div><div class="desc">Monochrome design for a clean, bold space.</div><div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BW-001">Details</button></div></div>
+      </article>
+      <article class="card" data-collection="black-gold">
+        <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◇</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
+        <div class="info"><div class="code">EM-BG-002</div><div class="name">Supercar Triptych</div><div class="desc">Three-car composition sold as one digital poster.</div><div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BG-002">Details</button></div></div>
+      </article>
+    </section>
+    <div class="notice"><strong style="color:#eee">Preview build</strong><br>Sample products only. No payment is enabled and no files are delivered yet. Before launch, replace these samples with your own poster images, set prices, and configure a compliant checkout flow.</div>
+    <footer>ELITEMOTION · DRIVE BEYOND ORDINARY</footer>
+  </main>
+  <script>
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor("#090909"); tg.setBackgroundColor("#090909"); } catch (_) {} }
+    const filters = document.querySelectorAll(".filter");
+    const cards = document.querySelectorAll(".card");
+    filters.forEach(btn => btn.addEventListener("click", () => {
+      filters.forEach(b => b.classList.toggle("active", b === btn));
+      let shown = 0;
+      cards.forEach(card => {
+        const visible = btn.dataset.filter === "all" || card.dataset.collection === btn.dataset.filter;
+        card.hidden = !visible;
+        if (visible) shown++;
+      });
+      document.getElementById("count").textContent = String(shown).padStart(2,"0") + " ITEMS";
+    }));
+    document.querySelectorAll(".buy").forEach(btn => btn.addEventListener("click", () => {
+      const message = "Product " + btn.dataset.product + ". Checkout is not enabled in this preview.";
+      if (tg && tg.showAlert) tg.showAlert(message); else alert(message);
+    }));
+  </script>
+</body>
+</html>
