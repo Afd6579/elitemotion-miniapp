@@ -85,7 +85,7 @@
      <div id="detail-message" class="notice" hidden role="status" aria-live="polite"></div>
 <footer>ELITEMOTION · DRIVE BEYOND ORDINARY</footer>
   </main>
-  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/@tonconnect/ui@latest/dist/tonconnect-ui.min.js'"></script>
+  
   <script>
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor("#090909"); tg.setBackgroundColor("#090909"); } catch (_) {} }
@@ -93,11 +93,42 @@
     const connectWalletButton = document.getElementById("ton-connect-manual");
     let tonUi = null;
 
+    function loadTonConnectSdk() {
+      return new Promise((resolve, reject) => {
+        if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) {
+          resolve();
+          return;
+        }
+        const sources = [
+          "https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js",
+          "https://cdn.jsdelivr.net/npm/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"
+        ];
+        let index = 0;
+        const tryNext = () => {
+          if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) {
+            resolve();
+            return;
+          }
+          if (index >= sources.length) {
+            reject(new Error("کتابخانه اتصال از هیچ‌کدام از آدرس‌ها بارگذاری نشد."));
+            return;
+          }
+          const script = document.createElement("script");
+          script.src = sources[index++];
+          script.onload = () => {
+            if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) resolve();
+            else tryNext();
+          };
+          script.onerror = tryNext;
+          document.head.appendChild(script);
+        };
+        tryNext();
+      });
+    }
+
     function initTonConnect() {
-      if (!window.TON_CONNECT_UI || !window.TON_CONNECT_UI.TonConnectUI) {
-        walletStatus.textContent = "کتابخانه اتصال کیف پول بارگذاری نشد. اتصال اینترنت را بررسی و صفحه را دوباره باز کن.";
-        return false;
-      }
+      if (tonUi) return true;
+      if (!window.TON_CONNECT_UI || !window.TON_CONNECT_UI.TonConnectUI) return false;
       try {
         tonUi = new window.TON_CONNECT_UI.TonConnectUI({
           manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json"
@@ -114,38 +145,30 @@
           walletStatus.textContent = "کیف پول متصل شد: " + shortAddress + " · " + networkLabel + ". پرداخت هنوز غیرفعال است.";
           connectWalletButton.textContent = "Wallet connected";
         });
-        walletStatus.textContent = "برای اتصال Tonkeeper روی دکمه زیر بزن.";
         return true;
       } catch (error) {
-        walletStatus.textContent = "راه‌اندازی TON Connect ناموفق بود. صفحه را دوباره بارگذاری کن.";
+        walletStatus.textContent = "راه‌اندازی اتصال ناموفق بود: " + (error && error.message ? error.message : "خطای نامشخص");
         return false;
       }
     }
 
     connectWalletButton.addEventListener("click", async function () {
-      walletStatus.textContent = "در حال باز کردن پنجره اتصال کیف پول...";
+      walletStatus.textContent = "مرحله ۱ از ۲: در حال بارگذاری ابزار اتصال کیف پول...";
       connectWalletButton.disabled = true;
       try {
-        if (!tonUi && !initTonConnect()) {
-          walletStatus.textContent = "کتابخانه TON Connect در دسترس نیست. اینترنت یا دسترسی به CDN را بررسی کن.";
-          return;
-        }
+        await loadTonConnectSdk();
+        walletStatus.textContent = "مرحله ۲ از ۲: ابزار آماده است؛ پنجره کیف پول باز می‌شود...";
+        if (!initTonConnect()) throw new Error("راه‌اندازی TON Connect ناموفق بود.");
         await tonUi.openModal();
-        walletStatus.textContent = "اگر پنجره انتخاب کیف پول باز نشد، ممکن است مرورگر داخلی برنامه آن را مسدود کرده باشد؛ لینک را در Chrome باز کن.";
+        walletStatus.textContent = "اگر پنجره باز نشد، مرورگر ممکن است آن را مسدود کرده باشد. در Chrome دوباره امتحان کن.";
       } catch (error) {
-        walletStatus.textContent = "خطای اتصال: " + (error && error.message ? error.message : "پنجره اتصال باز نشد") + ". صفحه را در Chrome باز کن و دوباره امتحان کن.";
+        walletStatus.textContent = "اتصال اجرا نشد: " + (error && error.message ? error.message : "خطای نامشخص") + " اگر پیام بارگذاری ماند، دسترسی اینترنت به CDN را بررسی کن.";
       } finally {
         connectWalletButton.disabled = false;
       }
     });
 
-    if (window.TON_CONNECT_UI) {
-      initTonConnect();
-    } else {
-      window.addEventListener("load", function () {
-        if (!tonUi) initTonConnect();
-      });
-    }
+    walletStatus.textContent = "آماده آزمایش؛ برای شروع دکمه Connect Tonkeeper را بزن.";
 
     const filters = document.querySelectorAll(".filter");
     const cards = document.querySelectorAll(".card");
