@@ -35,10 +35,11 @@
     .code{font-size:9px;letter-spacing:1.6px;color:var(--gold)}
     .name{font-size:14px;font-weight:700;margin:7px 0 5px}
     .desc{font-size:11px;color:var(--muted);line-height:1.4;min-height:30px}
-    .buyrow{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:12px}
-    .price{font-size:12px;font-weight:bold}
-    .buy{background:var(--red);color:white;border:0;border-radius:8px;padding:9px 10px;font-size:11px;font-weight:bold}
-    .cart-add{background:#242424;border:1px solid #444;color:#fff;border-radius:8px;padding:9px 10px;font-size:11px;font-weight:bold}
+    .buyrow{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:7px;margin-top:12px}
+    .price{font-size:12px;font-weight:bold;grid-column:1 / -1}
+    .buy,.cart-add{display:inline-flex;justify-content:center;align-items:center;min-height:38px;width:100%;box-sizing:border-box;white-space:nowrap;cursor:pointer;border-radius:8px;padding:9px 8px;font-size:11px;font-weight:bold}
+    .buy{background:var(--red);color:white;border:0}
+    .cart-add{background:#242424;border:1px solid var(--gold);color:#fff}
     .cart-panel{margin:18px 0;border:1px solid #493a1e;border-radius:16px;padding:15px;background:#111}
     .cart-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
     .cart-line:last-child{border-bottom:0}
@@ -80,15 +81,15 @@
     <section class="grid" id="products">
       <article class="card" data-product="EM-BG-001" data-collection="black-gold">
         <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◆</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
-        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BG-001">Details</button><button class="cart-add" data-add="EM-BG-001" type="button">Add</button></div>
+        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BG-001">Details</button><button class="cart-add" data-add="EM-BG-001" type="button">افزودن به سبد</button></div>
       </article>
       <article class="card" data-product="EM-BW-001" data-collection="black-white">
         <div class="art"><span class="stamp">BLACK &amp; WHITE</span><span class="car">◈</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
-        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BW-001">Details</button><button class="cart-add" data-add="EM-BW-001" type="button">Add</button></div>
+        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BW-001">Details</button><button class="cart-add" data-add="EM-BW-001" type="button">افزودن به سبد</button></div>
       </article>
       <article class="card" data-product="EM-BG-002" data-collection="black-gold">
         <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◇</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
-        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BG-002">Details</button><button class="cart-add" data-add="EM-BG-002" type="button">Add</button></div>
+        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BG-002">Details</button><button class="cart-add" data-add="EM-BG-002" type="button">افزودن به سبد</button></div>
       </article>
     </section>
     <section class="cart-panel" id="cart-panel">
