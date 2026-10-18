@@ -53,7 +53,7 @@
     <section class="notice" id="wallet-section" style="margin-bottom:18px">
       <strong style="color:#eee">TON Connect · Mainnet</strong>
       <p id="wallet-status" style="margin:8px 0;color:var(--muted)">اتصال کیف پول هنوز انجام نشده است.</p>
-      <div id="ton-connect"></div>
+      <button class="buy" id="ton-connect-manual" type="button">Connect Tonkeeper</button>
       <p style="font-size:10px;margin-bottom:0">این مرحله فقط اتصال کیف پول را آزمایش می‌کند؛ هیچ تراکنشی ارسال نمی‌شود.</p>
     </section>
     <section class="hero">
@@ -85,36 +85,58 @@
      <div id="detail-message" class="notice" hidden role="status" aria-live="polite"></div>
 <footer>ELITEMOTION · DRIVE BEYOND ORDINARY</footer>
   </main>
-  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+  <script src="https://unpkg.com/@tonconnect/ui@5.0.0/dist/tonconnect-ui.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/@tonconnect/ui@5.0.0/dist/tonconnect-ui.min.js'"></script>
   <script>
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor("#090909"); tg.setBackgroundColor("#090909"); } catch (_) {} }
     const walletStatus = document.getElementById("wallet-status");
-    if (window.TON_CONNECT_UI && document.getElementById("ton-connect")) {
+    const connectWalletButton = document.getElementById("ton-connect-manual");
+    let tonUi = null;
+
+    function initTonConnect() {
+      if (!window.TON_CONNECT_UI || !window.TON_CONNECT_UI.TonConnectUI) {
+        walletStatus.textContent = "کتابخانه اتصال کیف پول بارگذاری نشد. اتصال اینترنت را بررسی و صفحه را دوباره باز کن.";
+        return false;
+      }
       try {
-        const tonUi = new TON_CONNECT_UI.TonConnectUI({
-          manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
-          buttonRootId: "ton-connect"
+        tonUi = new window.TON_CONNECT_UI.TonConnectUI({
+          manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json"
         });
-        tonUi.uiOptions = {
-          language: "en",
-          uiPreferences: { theme: TON_CONNECT_UI.THEME.DARK }
-        };
         tonUi.onStatusChange(wallet => {
           if (!wallet) {
-            walletStatus.textContent = "کیف پول متصل نیست. برای آزمایش، روی Connect Wallet بزن.";
+            walletStatus.textContent = "کیف پول متصل نیست. برای اتصال، دکمه را بزن.";
+            connectWalletButton.textContent = "Connect Tonkeeper";
             return;
           }
           const address = wallet.account.address || "";
           const shortAddress = address.length > 16 ? address.slice(0, 8) + "…" + address.slice(-6) : address;
           const networkLabel = wallet.account.chain === "-239" ? "Mainnet" : (wallet.account.chain === "-3" ? "Testnet" : "شبکه نامشخص");
           walletStatus.textContent = "کیف پول متصل شد: " + shortAddress + " · " + networkLabel + ". پرداخت هنوز غیرفعال است.";
+          connectWalletButton.textContent = "Wallet connected";
         });
+        walletStatus.textContent = "برای اتصال Tonkeeper روی دکمه زیر بزن.";
+        return true;
       } catch (error) {
-        walletStatus.textContent = "اتصال TON Connect آماده نشد. لطفاً صفحه را دوباره بارگذاری کن.";
+        walletStatus.textContent = "راه‌اندازی TON Connect ناموفق بود. صفحه را دوباره بارگذاری کن.";
+        return false;
       }
+    }
+
+    connectWalletButton.addEventListener("click", async function () {
+      if (!tonUi && !initTonConnect()) return;
+      try {
+        await tonUi.openModal();
+      } catch (error) {
+        walletStatus.textContent = "پنجره اتصال باز نشد. لطفاً صفحه را دوباره بارگذاری و دوباره تلاش کن.";
+      }
+    });
+
+    if (window.TON_CONNECT_UI) {
+      initTonConnect();
     } else {
-      walletStatus.textContent = "کتابخانه TON Connect بارگذاری نشد؛ اتصال در حال حاضر در دسترس نیست.";
+      window.addEventListener("load", function () {
+        if (!tonUi) initTonConnect();
+      });
     }
 
     const filters = document.querySelectorAll(".filter");
