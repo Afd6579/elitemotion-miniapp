@@ -118,38 +118,52 @@ const posterDetails = {
   }
 };
 
-document.addEventListener("click", function (event) {
-  const btn = event.target.closest(".buy");
-  if (!btn) return;
+document.querySelectorAll(".buy[data-product]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    const id = btn.getAttribute("data-product");
+    const item = posterDetails[id];
+    const panel = document.getElementById("detail-message");
 
-  const id = btn.getAttribute("data-product");
-  const item = posterDetails[id];
-  const panel = document.getElementById("detail-message");
-  if (!panel || !item) return;
+    if (!panel) {
+      alert("بخش مشخصات پوستر در صفحه پیدا نشد. صفحه را دوباره بارگذاری کنید.");
+      return;
+    }
 
-  panel.innerHTML = "";
-  const heading = document.createElement("h3");
-  heading.textContent = item.title;
-  const collection = document.createElement("p");
-  collection.textContent = "Collection: " + item.collection;
-  const description = document.createElement("p");
-  description.textContent = item.description;
-  const format = document.createElement("p");
-  format.textContent = "Product code: " + id + " · " + item.format;
-  const price = document.createElement("p");
-  price.textContent = "Price: " + item.price;
-  const note = document.createElement("p");
-  note.textContent = "Online payment and automatic file delivery are not available yet.";
-  const close = document.createElement("button");
-  close.type = "button";
-  close.className = "buy";
-  close.textContent = "Close details";
-  close.addEventListener("click", function () {
-    panel.hidden = true;
+    panel.replaceChildren();
+
+    if (!item) {
+      const error = document.createElement("p");
+      error.textContent = "برای این شناسه اطلاعاتی ثبت نشده است: " + (id || "بدون شناسه");
+      panel.appendChild(error);
+      panel.hidden = false;
+      panel.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    const heading = document.createElement("h3");
+    heading.textContent = item.title;
+    const collection = document.createElement("p");
+    collection.textContent = "مجموعه: " + item.collection;
+    const description = document.createElement("p");
+    description.textContent = item.description;
+    const format = document.createElement("p");
+    format.textContent = "کد محصول: " + id + " · " + item.format;
+    const price = document.createElement("p");
+    price.textContent = "قیمت: " + item.price;
+    const note = document.createElement("p");
+    note.textContent = "پرداخت آنلاین و تحویل خودکار فایل هنوز فعال نیست.";
+    const close = document.createElement("button");
+    close.type = "button";
+    close.className = "buy";
+    close.textContent = "بستن مشخصات";
+    close.addEventListener("click", function () {
+      panel.hidden = true;
+    });
+
+    panel.append(heading, collection, description, format, price, note, close);
+    panel.hidden = false;
+    panel.scrollIntoView({ behavior: "smooth", block: "center" });
   });
-  panel.append(heading, collection, description, format, price, note, close);
-  panel.hidden = false;
-  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
 });
   </script>
 </body>
