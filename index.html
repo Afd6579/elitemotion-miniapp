@@ -84,6 +84,12 @@
         <div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BG-002">Details</button></div>
       </article>
     </section>
+    <section class="notice" id="bundle-offer">
+      <strong style="color:#eee">ELITEMOTION DUO BUNDLE</strong>
+      <p style="margin:8px 0">Choose any two posters for <strong style="color:var(--gold)">$9.00</strong> instead of $10.00.</p>
+      <p style="margin:0">معادل TON با نرخ زنده محاسبه می‌شود. پرداخت و انتخاب دو محصول برای سفارش هنوز فعال نیست.</p>
+      <p id="bundle-ton-price" style="margin:8px 0 0;color:var(--gold)">معادل TON پس از دریافت نرخ نمایش داده می‌شود.</p>
+    </section>
     <div class="notice"><strong style="color:#eee">Preview build</strong><br>Sample products only. No payment is enabled and no files are delivered yet. Before launch, replace these samples with your own poster images, set prices, and configure a compliant checkout flow.</div>
      <div id="detail-message" class="notice" hidden role="status" aria-live="polite"></div>
 <footer>ELITEMOTION · DRIVE BEYOND ORDINARY</footer>
@@ -118,6 +124,10 @@
         tonRateStatus.textContent = "نرخ تقریبی بازار: 1 TON ≈ $" + rate.toFixed(4) +
           " · به‌روزرسانی: " + tonRateUpdatedAt.toLocaleTimeString();
         updatePosterPriceDisplays();
+      const bundleTon = usdToTon(9);
+      document.getElementById("bundle-ton-price").textContent = bundleTon === null
+        ? "معادل TON فعلاً در دسترس نیست."
+        : "۲ پوستر ≈ " + bundleTon.toFixed(3) + " TON با نرخ مرجع فعلی.";
       } catch (error) {
         tonRateStatus.textContent = "نرخ زنده در دسترس نیست. برای قیمت نهایی به این مقدار تکیه نکن؛ دوباره تلاش کن.";
       } finally {
@@ -245,8 +255,8 @@ const posterDetails = {
     collection: "Black & Gold",
     description: "A premium automotive wall-art concept with a dark, cinematic look and restrained gold accents.",
     format: "Digital poster file",
-    price: "USD price not set",
-    usdPrice: null
+    price: "$5.00",
+    usdPrice: 5.00
   },
   "EM-BW-001": {
     title: "Monochrome Automotive Study 01",
