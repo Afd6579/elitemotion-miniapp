@@ -1,0 +1,12 @@
+name = "elitemotion-stars-test"
+main = "src/index.js"
+compatibility_date = "2026-10-18"
+
+# Intentionally no D1 database ID is configured in this template.
+# Create and bind D1 only after reviewing the prototype.
+[vars]
+PAYMENT_MODE = "test"
+
+# Never put BOT_TOKEN or TELEGRAM_WEBHOOK_SECRET in this file.
+# Add them with: npx wrangler secret put BOT_TOKEN
+# and: npx wrangler secret put TELEGRAM_WEBHOOK_SECRET
