@@ -88,10 +88,16 @@
       </div>
     </section>
     <div class="section-head"><h2>Featured posters</h2><span class="count" id="count">03 ITEMS</span></div>
-    <nav class="filters" aria-label="Collections">
-      <button class="filter active" data-filter="all">All posters</button>
-      <button class="filter" data-filter="black-gold">Black &amp; Gold</button>
-      <button class="filter" data-filter="black-white">Black &amp; White</button>
+    <nav class="filters" id="category-filters" aria-label="دسته‌بندی خودروها">
+      <button class="filter active" data-category="all">همهٔ پوسترها</button>
+      <button class="filter" data-category="german">آلمانی</button>
+      <button class="filter" data-category="italian">ایتالیایی</button>
+      <button class="filter" data-category="japanese">ژاپنی</button>
+      <button class="filter" data-category="american">آمریکایی</button>
+      <button class="filter" data-category="korean">کره‌ای</button>
+      <button class="filter" data-category="french">فرانسوی</button>
+      <button class="filter" data-category="comparison">مقایسه‌ای</button>
+      <button class="filter" data-category="mansory">MANSORY</button>
     </nav>
     <section class="grid" id="products"></section>
     <section class="cart-panel" id="cart-panel">
@@ -130,12 +136,30 @@
     const products = [{"id":"EM-001","title":"AUDI","image":"AUDI.png","collection":"black-gold","usdPrice":5},{"id":"EM-002","title":"Audi","image":"Audi .png","collection":"black-gold","usdPrice":5},{"id":"EM-003","title":"BMW","image":"BMW .png","collection":"black-gold","usdPrice":5},{"id":"EM-004","title":"BMW M4","image":"BMW M4.png","collection":"black-gold","usdPrice":5},{"id":"EM-005","title":"BMW TRILOGY","image":"BMW TRILOGY .png","collection":"black-gold","usdPrice":5},{"id":"EM-006","title":"BMW TRILOGY(2)","image":"BMW TRILOGY(2).png","collection":"black-gold","usdPrice":5},{"id":"EM-007","title":"BMW TRILOGY","image":"BMW TRILOGY.png","collection":"black-gold","usdPrice":5},{"id":"EM-008","title":"Benz C63","image":"Benz C63.png","collection":"black-gold","usdPrice":5},{"id":"EM-009","title":"C63 2014","image":"C63 2014.png","collection":"black-gold","usdPrice":5},{"id":"EM-010","title":"CHIRON 2026","image":"CHIRON 2026.png","collection":"black-gold","usdPrice":5},{"id":"EM-011","title":"Comparison (3)","image":"Comparison (3).png","collection":"black-gold","usdPrice":5},{"id":"EM-012","title":"Comparison (4)","image":"Comparison (4).png","collection":"black-gold","usdPrice":5},{"id":"EM-013","title":"Comparison","image":"Comparison .png","collection":"black-gold","usdPrice":5},{"id":"EM-014","title":"Comparison(2)","image":"Comparison(2).png","collection":"black-gold","usdPrice":5},{"id":"EM-015","title":"Dodge Challenger SRT","image":"Dodge Challenger SRT.png","collection":"black-gold","usdPrice":5},{"id":"EM-016","title":"Dodge Charger 2014","image":"Dodge Charger 2014.jpg","collection":"black-gold","usdPrice":5},{"id":"EM-017","title":"Dodge Charger 2026 Mansory","image":"Dodge Charger 2026 Mansory.png","collection":"black-gold","usdPrice":5},{"id":"EM-018","title":"E200 2026","image":"E200 2026.png","collection":"black-gold","usdPrice":5},{"id":"EM-019","title":"Ford Mustang","image":"Ford Mustang .png","collection":"black-gold","usdPrice":5},{"id":"EM-020","title":"G63","image":"G63.png","collection":"black-gold","usdPrice":5},{"id":"EM-021","title":"Hyundai","image":"Hyundai .png","collection":"black-gold","usdPrice":5},{"id":"EM-022","title":"LX700","image":"LX700.png","collection":"black-gold","usdPrice":5},{"id":"EM-023","title":"Lamborghini (1)","image":"Lamborghini (1).png","collection":"black-gold","usdPrice":5},{"id":"EM-024","title":"Lamborghini","image":"Lamborghini .png","collection":"black-gold","usdPrice":5},{"id":"EM-025","title":"Land Cruiser","image":"Land Cruiser .png","collection":"black-gold","usdPrice":5},{"id":"EM-026","title":"Lexus lx570","image":"Lexus lx570 .png","collection":"black-gold","usdPrice":5},{"id":"EM-027","title":"Mansory","image":"Mansory.png","collection":"black-gold","usdPrice":5},{"id":"EM-028","title":"Mazda","image":"Mazda .png","collection":"black-gold","usdPrice":5},{"id":"EM-029","title":"Mazda","image":"Mazda.png","collection":"black-gold","usdPrice":5},{"id":"EM-030","title":"Mercedes-Benz","image":"Mercedes-Benz .png","collection":"black-gold","usdPrice":5},{"id":"EM-031","title":"Mercedes-Benz AMG","image":"Mercedes-Benz AMG.png","collection":"black-gold","usdPrice":5},{"id":"EM-032","title":"Mercedes-Benz","image":"Mercedes-Benz.png","collection":"black-gold","usdPrice":5},{"id":"EM-033","title":"NISSAN","image":"NISSAN.png","collection":"black-gold","usdPrice":5},{"id":"EM-034","title":"Nissan Gtr","image":"Nissan Gtr.png","collection":"black-gold","usdPrice":5},{"id":"EM-035","title":"Nissan Poster","image":"Nissan Poster .png","collection":"black-gold","usdPrice":5},{"id":"EM-036","title":"Porsche 911 GT3(1)","image":"Porsche 911 GT3(1).png","collection":"black-gold","usdPrice":5},{"id":"EM-037","title":"Porsche 911 GT3","image":"Porsche 911 GT3.png","collection":"black-gold","usdPrice":5},{"id":"EM-038","title":"Rolls-Royce","image":"Rolls-Royce .png","collection":"black-gold","usdPrice":5},{"id":"EM-039","title":"Shelby GT500 1967","image":"Shelby GT500 1967.png","collection":"black-gold","usdPrice":5},{"id":"EM-040","title":"Shelby GT500","image":"Shelby GT500.png","collection":"black-gold","usdPrice":5},{"id":"EM-041","title":"Toyota","image":"Toyota .png","collection":"black-gold","usdPrice":5},{"id":"EM-042","title":"Toyota Poster","image":"Toyota Poster.png","collection":"black-gold","usdPrice":5},{"id":"EM-043","title":"Toyota","image":"Toyota.png","collection":"black-gold","usdPrice":5}];
     const catalog = Object.fromEntries(products.map(p => [p.id, { title: p.title, usdPrice: p.usdPrice }]));
 
+function categoryFor(product) {
+  const title = product.title.toLowerCase();
+  if (title.includes("comparison")) return "comparison";
+  if (title.includes("mansory")) return "mansory";
+  if (/audi|bmw|benz|mercedes|g63|c63|e200|porsche|rolls-royce/.test(title)) return "german";
+  if (/lamborghini/.test(title)) return "italian";
+  if (/toyota|mazda|nissan|lexus|land cruiser|lx570|lx700/.test(title)) return "japanese";
+  if (/ford|mustang|dodge|shelby/.test(title)) return "american";
+  if (/hyundai/.test(title)) return "korean";
+  if (/chiron|bugatti/.test(title)) return "french";
+  return "other";
+}
+const categoryLabels = {
+  german: "آلمانی", italian: "ایتالیایی", japanese: "ژاپنی",
+  american: "آمریکایی", korean: "کره‌ای", french: "فرانسوی",
+  comparison: "مقایسه‌ای", mansory: "MANSORY", other: "سایر"
+};
 const productGrid = document.getElementById("products");
 products.forEach(function (product) {
   const card = document.createElement("article");
   card.className = "card";
   card.dataset.product = product.id;
   card.dataset.collection = product.collection;
+  card.dataset.category = categoryFor(product);
 
   const art = document.createElement("div");
   art.className = "art";
@@ -147,7 +171,7 @@ products.forEach(function (product) {
   image.decoding = "async";
   const stamp = document.createElement("span");
   stamp.className = "stamp";
-  stamp.textContent = product.collection === "black-white" ? "BLACK & WHITE" : "BLACK & GOLD";
+  stamp.textContent = categoryLabels[card.dataset.category] || "ELITEMOTION";
   art.append(image, stamp);
 
   const info = document.createElement("div");
@@ -428,13 +452,13 @@ document.getElementById("count").textContent = String(products.length).padStart(
     }
 
     walletStatus.textContent = "برای اتصال، دکمه را بزن تا ابزار آماده شود.";
-    const filters = document.querySelectorAll(".filter");
+    const filters = document.querySelectorAll("#category-filters .filter");
     filters.forEach(btn => btn.addEventListener("click", () => {
       const cards = document.querySelectorAll("#products .card");
       filters.forEach(b => b.classList.toggle("active", b === btn));
       let shown = 0;
       cards.forEach(card => {
-        const visible = btn.dataset.filter === "all" || card.dataset.collection === btn.dataset.filter;
+        const visible = btn.dataset.category === "all" || card.dataset.category === btn.dataset.category;
         card.hidden = !visible;
         if (visible) shown++;
       });
@@ -443,7 +467,7 @@ document.getElementById("count").textContent = String(products.length).padStart(
         
 const posterDetails = Object.fromEntries(products.map(p => [p.id, {
   title: p.title,
-  collection: p.collection === "black-white" ? "Black & White" : "Black & Gold",
+  collection: categoryLabels[categoryFor(p)] || "سایر",
   description: "پوستر دیجیتال خودرو از مجموعه ELITEMOTION.",
   format: "Digital poster file",
   price: "$" + p.usdPrice.toFixed(2),
