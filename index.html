@@ -38,6 +38,13 @@
     .buyrow{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:12px}
     .price{font-size:12px;font-weight:bold}
     .buy{background:var(--red);color:white;border:0;border-radius:8px;padding:9px 10px;font-size:11px;font-weight:bold}
+    .cart-add{background:#242424;border:1px solid #444;color:#fff;border-radius:8px;padding:9px 10px;font-size:11px;font-weight:bold}
+    .cart-panel{margin:18px 0;border:1px solid #493a1e;border-radius:16px;padding:15px;background:#111}
+    .cart-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+    .cart-line:last-child{border-bottom:0}
+    .cart-actions{display:flex;gap:8px;align-items:center}
+    .cart-actions button{background:#222;color:#fff;border:1px solid #444;border-radius:6px;padding:5px 9px}
+    .cart-total{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:14px}
     #ton-connect{margin-top:10px}
     .notice{margin-top:20px;border:1px solid var(--line);border-radius:14px;padding:13px;color:var(--muted);font-size:11px;line-height:1.6}
     footer{text-align:center;color:#686868;font-size:10px;letter-spacing:2px;padding:25px 0 0}
@@ -73,16 +80,26 @@
     <section class="grid" id="products">
       <article class="card" data-product="EM-BG-001" data-collection="black-gold">
         <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◆</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
-        <div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BG-001">Details</button></div>
+        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BG-001">Details</button><button class="cart-add" data-add="EM-BG-001" type="button">Add</button></div>
       </article>
       <article class="card" data-product="EM-BW-001" data-collection="black-white">
         <div class="art"><span class="stamp">BLACK &amp; WHITE</span><span class="car">◈</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
-        <div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BW-001">Details</button></div>
+        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BW-001">Details</button><button class="cart-add" data-add="EM-BW-001" type="button">Add</button></div>
       </article>
       <article class="card" data-product="EM-BG-002" data-collection="black-gold">
         <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◇</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
-        <div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BG-002">Details</button></div>
+        <div class="buyrow"><span class="price">$5.00</span><button class="buy" data-product="EM-BG-002">Details</button><button class="cart-add" data-add="EM-BG-002" type="button">Add</button></div>
       </article>
+    </section>
+    <section class="cart-panel" id="cart-panel">
+      <div class="section-head" style="margin:0 0 8px"><h2>سبد خرید</h2><span class="count" id="cart-count">۰ محصول</span></div>
+      <div id="cart-items"><p style="color:var(--muted);font-size:12px;margin:8px 0">هنوز محصولی اضافه نشده است.</p></div>
+      <div class="cart-total"><span>جمع محصولات</span><strong id="cart-subtotal">$0.00</strong></div>
+      <div class="cart-total"><span>تخفیف بستهٔ دو پوستر</span><strong id="cart-discount">$0.00</strong></div>
+      <div class="cart-total"><span>مبلغ نهایی</span><strong id="cart-total" style="color:var(--gold)">$0.00</strong></div>
+      <p id="cart-ton-total" style="color:var(--muted);font-size:12px;margin:10px 0">معادل TON پس از دریافت نرخ محاسبه می‌شود.</p>
+      <button class="buy" id="clear-cart" type="button">خالی کردن سبد</button>
+      <p style="font-size:10px;margin:10px 0 0;color:var(--muted)">این سبد فقط پیش‌نمایش محاسبهٔ قیمت است؛ ثبت سفارش و پرداخت هنوز غیرفعال‌اند.</p>
     </section>
     <section class="notice" id="bundle-offer">
       <strong style="color:#eee">ELITEMOTION DUO BUNDLE</strong>
@@ -106,6 +123,109 @@
     let tonUsdRate = null;
     let tonRateUpdatedAt = null;
 
+    const cart = new Map();
+    const catalog = {
+      "EM-BG-001": { title: "Signature Automotive Study 01", usdPrice: 5.00 },
+      "EM-BW-001": { title: "Monochrome Automotive Study 01", usdPrice: 5.00 },
+      "EM-BG-002": { title: "Signature Automotive Study 02", usdPrice: 5.00 }
+    };
+
+    function money(value) {
+      return "$" + value.toFixed(2);
+    }
+
+    function calculateCart() {
+      let count = 0;
+      let subtotal = 0;
+      cart.forEach((quantity, id) => {
+        count += quantity;
+        subtotal += catalog[id].usdPrice * quantity;
+      });
+      // The $9 bundle discount applies to exactly two posters, including two copies of one poster.
+      const bundles = Math.floor(count / 2);
+      const discount = bundles * 1.00;
+      const total = subtotal - discount;
+      return { count, subtotal, discount, total };
+    }
+
+    function renderCart() {
+      const itemsEl = document.getElementById("cart-items");
+      itemsEl.replaceChildren();
+      const ids = Array.from(cart.keys()).filter(id => cart.get(id) > 0);
+      const summary = calculateCart();
+      document.getElementById("cart-count").textContent = summary.count + " محصول";
+      document.getElementById("cart-subtotal").textContent = money(summary.subtotal);
+      document.getElementById("cart-discount").textContent = "−" + money(summary.discount);
+      document.getElementById("cart-total").textContent = money(summary.total);
+      const ton = usdToTon(summary.total);
+      document.getElementById("cart-ton-total").textContent = ton === null
+        ? "معادل TON پس از دریافت نرخ محاسبه می‌شود."
+        : "مبلغ تقریبی: " + ton.toFixed(3) + " TON · نرخ مرجع 1 TON ≈ $" + tonUsdRate.toFixed(4);
+
+      if (!ids.length) {
+        const empty = document.createElement("p");
+        empty.style.cssText = "color:var(--muted);font-size:12px;margin:8px 0";
+        empty.textContent = "هنوز محصولی اضافه نشده است.";
+        itemsEl.appendChild(empty);
+        return;
+      }
+
+      ids.forEach(id => {
+        const line = document.createElement("div");
+        line.className = "cart-line";
+        const info = document.createElement("div");
+        const name = document.createElement("strong");
+        name.style.fontSize = "12px";
+        name.textContent = catalog[id].title;
+        const price = document.createElement("div");
+        price.style.cssText = "color:var(--muted);font-size:11px;margin-top:4px";
+        price.textContent = money(catalog[id].usdPrice) + " each";
+        info.append(name, price);
+
+        const actions = document.createElement("div");
+        actions.className = "cart-actions";
+        const minus = document.createElement("button");
+        minus.type = "button";
+        minus.textContent = "−";
+        minus.setAttribute("aria-label", "کاهش تعداد " + catalog[id].title);
+        minus.addEventListener("click", () => {
+          const next = (cart.get(id) || 0) - 1;
+          if (next <= 0) cart.delete(id); else cart.set(id, next);
+          renderCart();
+        });
+        const quantity = document.createElement("span");
+        quantity.textContent = String(cart.get(id));
+        quantity.style.minWidth = "16px";
+        quantity.style.textAlign = "center";
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.textContent = "+";
+        plus.setAttribute("aria-label", "افزایش تعداد " + catalog[id].title);
+        plus.addEventListener("click", () => {
+          cart.set(id, (cart.get(id) || 0) + 1);
+          renderCart();
+        });
+        actions.append(minus, quantity, plus);
+        line.append(info, actions);
+        itemsEl.appendChild(line);
+      });
+    }
+
+    document.querySelectorAll("[data-add]").forEach(button => {
+      button.addEventListener("click", () => {
+        const id = button.getAttribute("data-add");
+        if (!catalog[id]) return;
+        cart.set(id, (cart.get(id) || 0) + 1);
+        renderCart();
+        document.getElementById("cart-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    document.getElementById("clear-cart").addEventListener("click", () => {
+      cart.clear();
+      renderCart();
+    });
+
     // Read-only market quote for display only. This does not initiate a wallet transaction.
     async function refreshTonUsdRate() {
       tonRateStatus.textContent = "در حال دریافت نرخ بازار TON/USD…";
@@ -124,6 +244,7 @@
         tonRateStatus.textContent = "نرخ تقریبی بازار: 1 TON ≈ $" + rate.toFixed(4) +
           " · به‌روزرسانی: " + tonRateUpdatedAt.toLocaleTimeString();
         updatePosterPriceDisplays();
+        renderCart();
       const bundleTon = usdToTon(9);
       document.getElementById("bundle-ton-price").textContent = bundleTon === null
         ? "معادل TON فعلاً در دسترس نیست."
