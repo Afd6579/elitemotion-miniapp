@@ -213,7 +213,7 @@ document.getElementById("count").textContent = String(products.length).padStart(
       document.getElementById("cart-total").textContent = money(summary.total);
       const ton = null;
       document.getElementById("cart-ton-total").textContent = ton === null
-        ? "معادل TON پس از دریافت نرخ محاسبه می‌شود."
+        ? "قیمت‌ها با Telegram Stars نمایش داده می‌شوند؛ پرداخت هنوز فعال نیست."
         : "مبلغ تقریبی: " + ton.toFixed(3) + " TON · نرخ مرجع 1 TON ≈ $" + tonUsdRate.toFixed(4);
 
       if (!ids.length) {
