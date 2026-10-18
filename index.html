@@ -100,8 +100,8 @@
           return;
         }
         const sources = [
-          "https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js",
-          "https://cdn.jsdelivr.net/npm/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"
+          "https://unpkg.com/@tonconnect/ui@3.0.2/dist/tonconnect-ui.min.js",
+          "https://cdn.jsdelivr.net/npm/@tonconnect/ui@3.0.2/dist/tonconnect-ui.min.js"
         ];
         let index = 0;
         const tryNext = () => {
@@ -114,12 +114,28 @@
             return;
           }
           const script = document.createElement("script");
-          script.src = sources[index++];
+          const thisSource = sources[index++];
+          let settled = false;
+          const timeoutId = setTimeout(() => {
+            if (settled) return;
+            settled = true;
+            script.remove();
+            tryNext();
+          }, 12000);
+          script.src = thisSource;
           script.onload = () => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timeoutId);
             if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) resolve();
             else tryNext();
           };
-          script.onerror = tryNext;
+          script.onerror = () => {
+            if (settled) return;
+            settled = true;
+            clearTimeout(timeoutId);
+            tryNext();
+          };
           document.head.appendChild(script);
         };
         tryNext();
