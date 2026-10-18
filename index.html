@@ -53,6 +53,8 @@
     <section class="notice" id="wallet-section" style="margin-bottom:18px">
       <strong style="color:#eee">TON Connect · Mainnet</strong>
       <p id="wallet-status" style="margin:8px 0;color:var(--muted)">اتصال کیف پول هنوز انجام نشده است.</p>
+      <p id="ton-rate-status" style="margin:8px 0;color:var(--muted)">نرخ TON/USD در حال دریافت است…</p>
+      <button class="filter" id="refresh-ton-rate" type="button">Refresh exchange rate</button>
       <div id="ton-connect-native" style="margin:12px 0;min-height:48px"></div>
       <button class="buy" id="ton-connect-manual" type="button">Retry connection</button>
       <p style="font-size:10px;margin-bottom:0">این مرحله فقط اتصال کیف پول را آزمایش می‌کند؛ هیچ تراکنشی ارسال نمی‌شود.</p>
@@ -69,15 +71,15 @@
       <button class="filter" data-filter="black-white">Black &amp; White</button>
     </nav>
     <section class="grid" id="products">
-      <article class="card" data-collection="black-gold">
+      <article class="card" data-product="EM-BG-001" data-collection="black-gold">
         <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◆</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
         <div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BG-001">Details</button></div>
       </article>
-      <article class="card" data-collection="black-white">
+      <article class="card" data-product="EM-BW-001" data-collection="black-white">
         <div class="art"><span class="stamp">BLACK &amp; WHITE</span><span class="car">◈</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
         <div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BW-001">Details</button></div>
       </article>
-      <article class="card" data-collection="black-gold">
+      <article class="card" data-product="EM-BG-002" data-collection="black-gold">
         <div class="art"><span class="stamp">BLACK &amp; GOLD</span><span class="car">◇</span><span class="placeholder">YOUR POSTER IMAGE</span></div>
         <div class="buyrow"><span class="price">Price to be set</span><button class="buy" data-product="EM-BG-002">Details</button></div>
       </article>
@@ -91,8 +93,62 @@
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor("#090909"); tg.setBackgroundColor("#090909"); } catch (_) {} }
     const walletStatus = document.getElementById("wallet-status");
+    const tonRateStatus = document.getElementById("ton-rate-status");
+    const refreshTonRateButton = document.getElementById("refresh-ton-rate");
     const connectWalletButton = document.getElementById("ton-connect-manual");
     let tonUi = null;
+    let tonUsdRate = null;
+    let tonRateUpdatedAt = null;
+
+    // Read-only market quote for display only. This does not initiate a wallet transaction.
+    async function refreshTonUsdRate() {
+      tonRateStatus.textContent = "در حال دریافت نرخ بازار TON/USD…";
+      refreshTonRateButton.disabled = true;
+      try {
+        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd", {
+          cache: "no-store",
+          headers: { "accept": "application/json" }
+        });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        const rate = Number(data && data["the-open-network"] && data["the-open-network"].usd);
+        if (!Number.isFinite(rate) || rate <= 0) throw new Error("نرخ معتبر دریافت نشد");
+        tonUsdRate = rate;
+        tonRateUpdatedAt = new Date();
+        tonRateStatus.textContent = "نرخ تقریبی بازار: 1 TON ≈ $" + rate.toFixed(4) +
+          " · به‌روزرسانی: " + tonRateUpdatedAt.toLocaleTimeString();
+        updatePosterPriceDisplays();
+      } catch (error) {
+        tonRateStatus.textContent = "نرخ زنده در دسترس نیست. برای قیمت نهایی به این مقدار تکیه نکن؛ دوباره تلاش کن.";
+      } finally {
+        refreshTonRateButton.disabled = false;
+      }
+    }
+
+    function usdToTon(usdPrice) {
+      if (!Number.isFinite(tonUsdRate) || tonUsdRate <= 0 || !Number.isFinite(usdPrice) || usdPrice <= 0) return null;
+      return usdPrice / tonUsdRate;
+    }
+
+    function updatePosterPriceDisplays() {
+      document.querySelectorAll(".card[data-product]").forEach(card => {
+        const id = card.getAttribute("data-product");
+        const item = posterDetails[id];
+        const priceEl = card.querySelector(".price");
+        if (!item || !priceEl) return;
+        if (!Number.isFinite(item.usdPrice) || item.usdPrice <= 0) {
+          priceEl.textContent = "USD price pending";
+          return;
+        }
+        const ton = usdToTon(item.usdPrice);
+        priceEl.textContent = ton === null
+          ? "$" + item.usdPrice.toFixed(2) + " · TON rate unavailable"
+          : "$" + item.usdPrice.toFixed(2) + " ≈ " + ton.toFixed(3) + " TON";
+      });
+    }
+
+    refreshTonRateButton.addEventListener("click", refreshTonUsdRate);
+    refreshTonUsdRate();
 
     function loadTonConnectSdk() {
       return new Promise((resolve, reject) => {
@@ -189,25 +245,30 @@ const posterDetails = {
     collection: "Black & Gold",
     description: "A premium automotive wall-art concept with a dark, cinematic look and restrained gold accents.",
     format: "Digital poster file",
-    price: "To be announced"
+    price: "USD price not set",
+    usdPrice: null
   },
   "EM-BW-001": {
     title: "Monochrome Automotive Study 01",
     collection: "Black & White",
     description: "A clean monochrome automotive wall-art concept designed for a modern, minimal interior.",
     format: "Digital poster file",
-    price: "To be announced"
+    price: "USD price not set",
+    usdPrice: null
   },
   "EM-BG-002": {
     title: "Signature Automotive Study 02",
     collection: "Black & Gold",
     description: "A second dark automotive art concept from the ELITEMOTION Black & Gold collection.",
     format: "Digital poster file",
-    price: "To be announced"
+    price: "USD price not set",
+    usdPrice: null
   }
 };
 
 document.querySelectorAll(".buy[data-product]").forEach(function (btn) {
+  const productCard = btn.closest(".card");
+  if (productCard) productCard.setAttribute("data-product", btn.getAttribute("data-product"));
   btn.addEventListener("click", function () {
     const id = btn.getAttribute("data-product");
     const item = posterDetails[id];
@@ -238,7 +299,14 @@ document.querySelectorAll(".buy[data-product]").forEach(function (btn) {
     const format = document.createElement("p");
     format.textContent = "کد محصول: " + id + " · " + item.format;
     const price = document.createElement("p");
-    price.textContent = "قیمت: " + item.price;
+    const estimatedTon = usdToTon(item.usdPrice);
+    price.textContent = Number.isFinite(item.usdPrice) && item.usdPrice > 0
+      ? "قیمت: $" + item.usdPrice.toFixed(2) + (estimatedTon === null ? " · نرخ TON فعلاً در دسترس نیست" : " · حدود " + estimatedTon.toFixed(3) + " TON")
+      : "قیمت دلاری این محصول هنوز تعیین نشده است.";
+    const rateNote = document.createElement("p");
+    rateNote.textContent = tonUsdRate
+      ? "نرخ مرجع فعلی: 1 TON ≈ $" + tonUsdRate.toFixed(4) + "؛ مبلغ TON تخمینی است و هنگام پرداخت باید دوباره محاسبه شود."
+      : "نرخ بازار دریافت نشده؛ معادل TON فعلاً قابل محاسبه نیست.";
     const note = document.createElement("p");
     note.textContent = "پرداخت آنلاین و تحویل خودکار فایل هنوز فعال نیست.";
     const close = document.createElement("button");
@@ -249,7 +317,7 @@ document.querySelectorAll(".buy[data-product]").forEach(function (btn) {
       panel.hidden = true;
     });
 
-    panel.append(heading, collection, description, format, price, note, close);
+    panel.append(heading, collection, description, format, price, rateNote, note, close);
     panel.hidden = false;
     panel.scrollIntoView({ behavior: "smooth", block: "center" });
   });
