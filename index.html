@@ -212,13 +212,7 @@ document.getElementById("count").textContent = String(products.length).padStart(
       document.getElementById("cart-discount").textContent = "−" + money(summary.discount);
       document.getElementById("cart-total").textContent = money(summary.total);
       const ton = null;
-      document.getElementById("cart-ton-total").textContent = ton === null
-        ? "قیمت‌ها با Telegram Stars نمایش داده می‌شوند؛ پرداخت هنوز فعال نیست."
-        : "مبلغ تقریبی: " + ton.toFixed(3) + " TON · نرخ مرجع 1 TON ≈ $" + tonUsdRate.toFixed(4);
-
-      if (!ids.length) {
-        const empty = document.createElement("p");
-        empty.style.cssText = "color:var(--muted);font-size:12px;margin:8px 0";
+      document.getElementById("cart-ton-total").textContent = "قیمت به Telegram Stars محاسبه شده است؛ پرداخت هنوز فعال نیست.";
         empty.textContent = "هنوز محصولی اضافه نشده است.";
         itemsEl.appendChild(empty);
         return;
@@ -491,10 +485,7 @@ document.querySelectorAll(".buy[data-product]").forEach(function (btn) {
     const format = document.createElement("p");
     format.textContent = "کد محصول: " + id + " · " + item.format;
     const price = document.createElement("p");
-    const estimatedTon = usdToTon(item.usdPrice);
-    price.textContent = Number.isFinite(item.usdPrice) && item.usdPrice > 0
-      ? "قیمت: $" + item.usdPrice.toFixed(2) + (estimatedTon === null ? " · نرخ TON فعلاً در دسترس نیست" : " · حدود " + estimatedTon.toFixed(3) + " TON")
-      : "قیمت دلاری این محصول هنوز تعیین نشده است.";
+    price.textContent = "قیمت: ۲۵۰ استار (XTR) · قیمت دو پوستر: ۴۵۰ استار";
     const rateNote = document.createElement("p");
     rateNote.textContent = tonUsdRate
       ? "نرخ مرجع فعلی: 1 TON ≈ $" + tonUsdRate.toFixed(4) + "؛ مبلغ TON تخمینی است و هنگام پرداخت باید دوباره محاسبه شود."
