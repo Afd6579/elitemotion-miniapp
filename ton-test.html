@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>ELITEMOTION · TON Connect Test</title>
+<style>
+body{margin:0;background:#090909;color:#f5f5f5;font:16px Arial,sans-serif;padding:24px;line-height:1.6}
+main{max-width:520px;margin:auto;border:1px solid #333;border-radius:16px;padding:20px;background:#141414}
+h1{font-size:22px;letter-spacing:2px}p{color:#bbb}#status{padding:12px;border:1px solid #333;border-radius:10px;overflow-wrap:anywhere}
+#ton-connect{margin:18px 0;min-height:48px}
+button{background:#d71920;color:#fff;border:0;border-radius:8px;padding:12px 16px;font-weight:bold}
+small{color:#999}
+</style>
+<script src="https://unpkg.com/@tonconnect/ui@3.0.2/dist/tonconnect-ui.min.js"></script>
+</head>
+<body>
+<main>
+<h1>ELITE<span style="color:#b99a55">MOTION</span></h1>
+<p>صفحهٔ آزمایشی مستقل TON Connect؛ این صفحه فقط اتصال کیف پول را آزمایش می‌کند و هیچ تراکنشی ارسال نمی‌کند.</p>
+<p id="status">در حال آماده‌سازی ابزار اتصال...</p>
+<div id="ton-connect"></div>
+<button id="open" type="button">باز کردن پنجره کیف پول</button>
+<p><small>اگر دکمهٔ رسمی یا پنجره نمایش داده نشد، متن وضعیت را برای پشتیبانی بفرست.</small></p>
+</main>
+<script>
+(function(){
+ const status=document.getElementById("status");
+ const button=document.getElementById("open");
+ let ui=null;
+ try {
+   if(!window.TON_CONNECT_UI || !window.TON_CONNECT_UI.TonConnectUI){
+     status.textContent="خطا: کتابخانه بارگذاری نشد. بررسی کن که لینک مستقیم کتابخانه در همین مرورگر باز می‌شود.";
+     return;
+   }
+   ui=new window.TON_CONNECT_UI.TonConnectUI({
+     manifestUrl:"https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
+     buttonRootId:"ton-connect",
+     uiPreferences:{theme:"DARK"}
+   });
+   status.textContent="ابزار آماده شد. دکمه رسمی TON Connect باید بالای دکمه قرمز ظاهر شود.";
+   if(typeof ui.onModalStateChange==="function"){
+     ui.onModalStateChange(function(state){
+       status.textContent="وضعیت پنجره: "+JSON.stringify(state);
+     });
+   }
+   ui.onStatusChange(function(wallet){
+     if(wallet) status.textContent="کیف پول متصل شد. پرداخت همچنان غیرفعال است.";
+     else status.textContent="کیف پول متصل نیست؛ می‌توانی اتصال را امتحان کنی.";
+   },function(error){
+     status.textContent="خطای اتصال: "+(error&&error.message?error.message:String(error));
+   });
+   button.addEventListener("click",async function(){
+     status.textContent="درخواست باز کردن پنجره ارسال شد...";
+     try { await ui.openModal(); status.textContent="درخواست بازشدن پنجره تکمیل شد."; }
+     catch(error){status.textContent="خطای بازکردن پنجره: "+(error&&error.message?error.message:String(error));}
+   });
+ } catch(error) {
+   status.textContent="خطای راه‌اندازی: "+(error&&error.message?error.message:String(error));
+ }
+})();
+</script>
+</body>
+</html>
