@@ -53,8 +53,8 @@
     <section class="notice" id="wallet-section" style="margin-bottom:18px">
       <strong style="color:#eee">TON Connect · Mainnet</strong>
       <p id="wallet-status" style="margin:8px 0;color:var(--muted)">اتصال کیف پول هنوز انجام نشده است.</p>
-      <div id="ton-connect-native" style="margin:12px 0"></div>
-      <button class="buy" id="ton-connect-manual" type="button">Open wallet picker</button>
+      <div id="ton-connect-native" style="margin:12px 0;min-height:48px"></div>
+      <button class="buy" id="ton-connect-manual" type="button">Retry connection</button>
       <p style="font-size:10px;margin-bottom:0">این مرحله فقط اتصال کیف پول را آزمایش می‌کند؛ هیچ تراکنشی ارسال نمی‌شود.</p>
     </section>
     <section class="hero">
@@ -96,113 +96,79 @@
 
     function loadTonConnectSdk() {
       return new Promise((resolve, reject) => {
-        if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) {
-          resolve();
-          return;
-        }
+        if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) return resolve();
         const sources = [
           "https://unpkg.com/@tonconnect/ui@3.0.2/dist/tonconnect-ui.min.js",
           "https://cdn.jsdelivr.net/npm/@tonconnect/ui@3.0.2/dist/tonconnect-ui.min.js"
         ];
         let index = 0;
-        const tryNext = () => {
-          if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) {
-            resolve();
-            return;
-          }
-          if (index >= sources.length) {
-            reject(new Error("کتابخانه اتصال از هیچ‌کدام از آدرس‌ها بارگذاری نشد."));
-            return;
-          }
+        const next = () => {
+          if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) return resolve();
+          if (index >= sources.length) return reject(new Error("کتابخانه بارگذاری نشد؛ اتصال به CDN را بررسی کن."));
           const script = document.createElement("script");
-          const thisSource = sources[index++];
-          let settled = false;
-          const timeoutId = setTimeout(() => {
-            if (settled) return;
-            settled = true;
+          let finished = false;
+          const timer = setTimeout(() => {
+            if (finished) return;
+            finished = true;
             script.remove();
-            tryNext();
-          }, 12000);
-          script.src = thisSource;
+            next();
+          }, 10000);
+          script.src = sources[index++];
           script.onload = () => {
-            if (settled) return;
-            settled = true;
-            clearTimeout(timeoutId);
+            if (finished) return;
+            finished = true;
+            clearTimeout(timer);
             if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) resolve();
-            else tryNext();
+            else next();
           };
           script.onerror = () => {
-            if (settled) return;
-            settled = true;
-            clearTimeout(timeoutId);
-            tryNext();
+            if (finished) return;
+            finished = true;
+            clearTimeout(timer);
+            next();
           };
           document.head.appendChild(script);
         };
-        tryNext();
+        next();
       });
     }
 
-    function initTonConnect() {
-      if (tonUi) return true;
-      if (!window.TON_CONNECT_UI || !window.TON_CONNECT_UI.TonConnectUI) return false;
-      try {
-        tonUi = new window.TON_CONNECT_UI.TonConnectUI({
-          manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
-          buttonRootId: "ton-connect-native",
-          uiPreferences: { theme: "DARK" }
-        });
-        if (typeof tonUi.onModalStateChange === "function") {
-          tonUi.onModalStateChange(state => {
-            if (state && state.status === "opened") {
-              walletStatus.textContent = "پنجره انتخاب کیف پول باز شد؛ یک کیف پول را انتخاب کن.";
-            } else if (state && state.status === "closed") {
-              walletStatus.textContent = "پنجره کیف پول بسته شد. برای تلاش دوباره، دکمه را بزن.";
-            }
-          });
+    async function ensureTonConnect() {
+      if (tonUi) return tonUi;
+      await loadTonConnectSdk();
+      tonUi = new window.TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
+        buttonRootId: "ton-connect-native",
+        uiPreferences: { theme: "DARK" }
+      });
+      tonUi.onStatusChange(wallet => {
+        if (!wallet) {
+          walletStatus.textContent = "کیف پول متصل نیست. دکمه رسمی را بزن.";
+          return;
         }
-        tonUi.onStatusChange(wallet => {
-          if (!wallet) {
-            walletStatus.textContent = "کیف پول متصل نیست. برای اتصال، دکمه را بزن.";
-            connectWalletButton.textContent = "Connect Tonkeeper";
-            return;
-          }
-          const address = wallet.account.address || "";
-          const shortAddress = address.length > 16 ? address.slice(0, 8) + "…" + address.slice(-6) : address;
-          const networkLabel = wallet.account.chain === "-239" ? "Mainnet" : (wallet.account.chain === "-3" ? "Testnet" : "شبکه نامشخص");
-          walletStatus.textContent = "کیف پول متصل شد: " + shortAddress + " · " + networkLabel + ". پرداخت هنوز غیرفعال است.";
-          connectWalletButton.textContent = "Wallet connected";
-        });
-        return true;
-      } catch (error) {
-        walletStatus.textContent = "راه‌اندازی اتصال ناموفق بود: " + (error && error.message ? error.message : "خطای نامشخص");
-        return false;
-      }
+        const address = wallet.account.address || "";
+        const shortAddress = address.length > 16 ? address.slice(0, 8) + "…" + address.slice(-6) : address;
+        const networkLabel = wallet.account.chain === "-239" ? "Mainnet" : (wallet.account.chain === "-3" ? "Testnet" : "شبکه نامشخص");
+        walletStatus.textContent = "کیف پول متصل شد: " + shortAddress + " · " + networkLabel + ". پرداخت همچنان غیرفعال است.";
+      });
+      return tonUi;
     }
 
     connectWalletButton.addEventListener("click", async function () {
-      walletStatus.textContent = "مرحله ۱ از ۲: در حال بارگذاری ابزار اتصال کیف پول...";
       connectWalletButton.disabled = true;
+      walletStatus.textContent = "در حال آماده‌سازی اتصال...";
       try {
-        await loadTonConnectSdk();
-        walletStatus.textContent = "مرحله ۲ از ۲: ابزار آماده است؛ پنجره کیف پول باز می‌شود...";
-        if (!initTonConnect()) throw new Error("راه‌اندازی TON Connect ناموفق بود.");
-        const modalResult = await Promise.race([
-          tonUi.openModal().then(() => "opened"),
-          new Promise(resolve => setTimeout(() => resolve("timeout"), 8000))
-        ]);
-        if (modalResult === "timeout") {
-          walletStatus.textContent = "پنجره خودکار باز نشد. دکمه رسمی TON Connect که کنار/بالای این دکمه نمایش داده شده را مستقیماً بزن.";
-        }
+        const ui = await ensureTonConnect();
+        walletStatus.textContent = "ابزار آماده است. اکنون دکمه رسمی TON Connect را بزن.";
+        // Do not call openModal here; the library's own button controls its modal.
       } catch (error) {
-        walletStatus.textContent = "اتصال اجرا نشد: " + (error && error.message ? error.message : "خطای نامشخص") + " اگر پیام بارگذاری ماند، دسترسی اینترنت به CDN را بررسی کن.";
+        walletStatus.textContent = "خطای اتصال: " + (error && error.message ? error.message : "بارگذاری ناموفق بود.");
       } finally {
         connectWalletButton.disabled = false;
       }
     });
 
-    walletStatus.textContent = "آماده آزمایش؛ برای شروع دکمه Connect Tonkeeper را بزن.";
-
+    walletStatus.textContent = "برای اتصال، دکمه را بزن تا ابزار آماده شود.";
     const filters = document.querySelectorAll(".filter");
     const cards = document.querySelectorAll(".card");
     filters.forEach(btn => btn.addEventListener("click", () => {
