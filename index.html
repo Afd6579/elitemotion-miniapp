@@ -94,21 +94,62 @@
       document.getElementById("count").textContent = String(shown).padStart(2,"0") + " ITEMS";
     }));
         
+const posterDetails = {
+  "EM-BG-001": {
+    title: "Signature Automotive Study 01",
+    collection: "Black & Gold",
+    description: "A premium automotive wall-art concept with a dark, cinematic look and restrained gold accents.",
+    format: "Digital poster file",
+    price: "To be announced"
+  },
+  "EM-BW-001": {
+    title: "Monochrome Automotive Study 01",
+    collection: "Black & White",
+    description: "A clean monochrome automotive wall-art concept designed for a modern, minimal interior.",
+    format: "Digital poster file",
+    price: "To be announced"
+  },
+  "EM-BG-002": {
+    title: "Signature Automotive Study 02",
+    collection: "Black & Gold",
+    description: "A second dark automotive art concept from the ELITEMOTION Black & Gold collection.",
+    format: "Digital poster file",
+    price: "To be announced"
+  }
+};
+
 document.addEventListener("click", function (event) {
   const btn = event.target.closest(".buy");
   if (!btn) return;
 
   const id = btn.getAttribute("data-product");
+  const item = posterDetails[id];
   const panel = document.getElementById("detail-message");
+  if (!panel || !item) return;
 
-  if (panel) {
-    panel.textContent =
-      "Product " + id + " — Checkout is not enabled yet.";
-    panel.hidden = false;
-    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  } else {
-    alert("Product " + id + " selected.");
-  }
+  panel.innerHTML = "";
+  const heading = document.createElement("h3");
+  heading.textContent = item.title;
+  const collection = document.createElement("p");
+  collection.textContent = "Collection: " + item.collection;
+  const description = document.createElement("p");
+  description.textContent = item.description;
+  const format = document.createElement("p");
+  format.textContent = "Product code: " + id + " · " + item.format;
+  const price = document.createElement("p");
+  price.textContent = "Price: " + item.price;
+  const note = document.createElement("p");
+  note.textContent = "Online payment and automatic file delivery are not available yet.";
+  const close = document.createElement("button");
+  close.type = "button";
+  close.className = "buy";
+  close.textContent = "Close details";
+  close.addEventListener("click", function () {
+    panel.hidden = true;
+  });
+  panel.append(heading, collection, description, format, price, note, close);
+  panel.hidden = false;
+  panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
 });
   </script>
 </body>
