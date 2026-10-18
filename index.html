@@ -110,23 +110,6 @@ document.addEventListener("click", function (event) {
     alert("Product " + id + " selected.");
   }
 });
- {
-      btn.addEventListener("click", function () {
-        const id = this.getAttribute("data-product");
-        const message = "Product " + id +
-          ". Checkout is not enabled in this preview.";
-        const panel = document.getElementById("detail-message");
-
-        if (panel) {
-          panel.textContent = message;
-          panel.hidden = false;
-        } else if (tg && typeof tg.showAlert === "function") {
-          tg.showAlert(message);
-        } else {
-          window.alert(message);
-        }
-      });
-    });
   </script>
 </body>
 </html>
