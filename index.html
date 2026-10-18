@@ -92,10 +92,23 @@
       });
       document.getElementById("count").textContent = String(shown).padStart(2,"0") + " ITEMS";
     }));
-    document.querySelectorAll(".buy").forEach(btn => btn.addEventListener("click", () => {
-      const message = "Product " + btn.dataset.product + ". Checkout is not enabled in this preview.";
-      if (tg && tg.showAlert) tg.showAlert(message); else alert(message);
-    }))
+        document.querySelectorAll(".buy").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const id = this.getAttribute("data-product");
+        const message = "Product " + id +
+          ". Checkout is not enabled in this preview.";
+        const panel = document.getElementById("detail-message");
+
+        if (panel) {
+          panel.textContent = message;
+          panel.hidden = false;
+        } else if (tg && typeof tg.showAlert === "function") {
+          tg.showAlert(message);
+        } else {
+          window.alert(message);
+        }
+      });
+    });
   </script>
 </body>
 </html>
