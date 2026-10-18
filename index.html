@@ -85,7 +85,7 @@
      <div id="detail-message" class="notice" hidden role="status" aria-live="polite"></div>
 <footer>ELITEMOTION · DRIVE BEYOND ORDINARY</footer>
   </main>
-  <script src="https://unpkg.com/@tonconnect/ui@5.0.0/dist/tonconnect-ui.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/@tonconnect/ui@5.0.0/dist/tonconnect-ui.min.js'"></script>
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/@tonconnect/ui@latest/dist/tonconnect-ui.min.js'"></script>
   <script>
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor("#090909"); tg.setBackgroundColor("#090909"); } catch (_) {} }
@@ -123,11 +123,19 @@
     }
 
     connectWalletButton.addEventListener("click", async function () {
-      if (!tonUi && !initTonConnect()) return;
+      walletStatus.textContent = "در حال باز کردن پنجره اتصال کیف پول...";
+      connectWalletButton.disabled = true;
       try {
+        if (!tonUi && !initTonConnect()) {
+          walletStatus.textContent = "کتابخانه TON Connect در دسترس نیست. اینترنت یا دسترسی به CDN را بررسی کن.";
+          return;
+        }
         await tonUi.openModal();
+        walletStatus.textContent = "اگر پنجره انتخاب کیف پول باز نشد، ممکن است مرورگر داخلی برنامه آن را مسدود کرده باشد؛ لینک را در Chrome باز کن.";
       } catch (error) {
-        walletStatus.textContent = "پنجره اتصال باز نشد. لطفاً صفحه را دوباره بارگذاری و دوباره تلاش کن.";
+        walletStatus.textContent = "خطای اتصال: " + (error && error.message ? error.message : "پنجره اتصال باز نشد") + ". صفحه را در Chrome باز کن و دوباره امتحان کن.";
+      } finally {
+        connectWalletButton.disabled = false;
       }
     });
 
