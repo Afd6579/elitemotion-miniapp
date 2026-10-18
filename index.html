@@ -53,7 +53,8 @@
     <section class="notice" id="wallet-section" style="margin-bottom:18px">
       <strong style="color:#eee">TON Connect · Mainnet</strong>
       <p id="wallet-status" style="margin:8px 0;color:var(--muted)">اتصال کیف پول هنوز انجام نشده است.</p>
-      <button class="buy" id="ton-connect-manual" type="button">Connect Tonkeeper</button>
+      <div id="ton-connect-native" style="margin:12px 0"></div>
+      <button class="buy" id="ton-connect-manual" type="button">Open wallet picker</button>
       <p style="font-size:10px;margin-bottom:0">این مرحله فقط اتصال کیف پول را آزمایش می‌کند؛ هیچ تراکنشی ارسال نمی‌شود.</p>
     </section>
     <section class="hero">
@@ -147,8 +148,19 @@
       if (!window.TON_CONNECT_UI || !window.TON_CONNECT_UI.TonConnectUI) return false;
       try {
         tonUi = new window.TON_CONNECT_UI.TonConnectUI({
-          manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json"
+          manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
+          buttonRootId: "ton-connect-native",
+          uiPreferences: { theme: "DARK" }
         });
+        if (typeof tonUi.onModalStateChange === "function") {
+          tonUi.onModalStateChange(state => {
+            if (state && state.status === "opened") {
+              walletStatus.textContent = "پنجره انتخاب کیف پول باز شد؛ یک کیف پول را انتخاب کن.";
+            } else if (state && state.status === "closed") {
+              walletStatus.textContent = "پنجره کیف پول بسته شد. برای تلاش دوباره، دکمه را بزن.";
+            }
+          });
+        }
         tonUi.onStatusChange(wallet => {
           if (!wallet) {
             walletStatus.textContent = "کیف پول متصل نیست. برای اتصال، دکمه را بزن.";
@@ -175,8 +187,13 @@
         await loadTonConnectSdk();
         walletStatus.textContent = "مرحله ۲ از ۲: ابزار آماده است؛ پنجره کیف پول باز می‌شود...";
         if (!initTonConnect()) throw new Error("راه‌اندازی TON Connect ناموفق بود.");
-        await tonUi.openModal();
-        walletStatus.textContent = "اگر پنجره باز نشد، مرورگر ممکن است آن را مسدود کرده باشد. در Chrome دوباره امتحان کن.";
+        const modalResult = await Promise.race([
+          tonUi.openModal().then(() => "opened"),
+          new Promise(resolve => setTimeout(() => resolve("timeout"), 8000))
+        ]);
+        if (modalResult === "timeout") {
+          walletStatus.textContent = "پنجره خودکار باز نشد. دکمه رسمی TON Connect که کنار/بالای این دکمه نمایش داده شده را مستقیماً بزن.";
+        }
       } catch (error) {
         walletStatus.textContent = "اتصال اجرا نشد: " + (error && error.message ? error.message : "خطای نامشخص") + " اگر پیام بارگذاری ماند، دسترسی اینترنت به CDN را بررسی کن.";
       } finally {
