@@ -1,10 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="theme-color" content="#090909">
-  <title>ELITEMOTION Store</title>
+  <meta name="description" content="ELITEMOTION — پوسترهای دیجیتال لوکس خودرو. هر پوستر ۵ دلار؛ انتخاب دو پوستر با قیمت ۹ دلار.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ELITEMOTION | Drive Beyond Ordinary">
+  <meta property="og:description" content="فروشگاه پوسترهای دیجیتال خودرو با استایل لوکس و سینمایی. هر پوستر ۵ دلار؛ دو پوستر ۹ دلار.">
+  <meta property="og:url" content="https://afd6579.github.io/elitemotion-miniapp/">
+  <meta name="twitter:card" content="summary">
+  <title>ELITEMOTION | فروشگاه پوستر دیجیتال خودرو</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root{color-scheme:dark;--bg:#090909;--panel:#141414;--line:#292929;--text:#f5f5f5;--muted:#a7a7a7;--red:#d71920;--gold:#b99a55}
@@ -15,6 +21,10 @@
     .brand{font-size:20px;letter-spacing:3px;font-weight:800}.brand span{color:var(--gold)}
     .tag{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:5px}
     .pill{border:1px solid #493a1e;color:var(--gold);padding:8px 10px;border-radius:999px;font-size:11px;white-space:nowrap}
+    .share-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .share-button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 13px;border-radius:9px;border:1px solid #493a1e;background:#171717;color:#f5f5f5;font-size:12px;text-decoration:none;cursor:pointer}
+    .share-button.primary{background:#d71920;border-color:#d71920}
+    body.telegram-app .wrap{padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(28px,env(safe-area-inset-bottom))}
     .hero{padding:24px 20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,#181818,#0c0c0c);margin-bottom:22px}
     .eyebrow{font-size:10px;letter-spacing:3px;color:var(--red);font-weight:bold}
     h1{font-size:clamp(27px,7vw,42px);line-height:1.04;margin:12px 0}
@@ -71,6 +81,10 @@
       <div class="eyebrow">AUTOMOTIVE VISUALS / COLLECTION 01</div>
       <h1>Make your wall<br>move.</h1>
       <p>Premium digital automotive posters. Carefully curated visuals for enthusiasts, collectors and modern spaces.</p>
+      <div class="share-row">
+        <a class="share-button primary" id="telegram-share" href="https://t.me/share/url?url=https%3A%2F%2Fafd6579.github.io%2Felitemotion-miniapp%2F&text=ELITEMOTION%20%E2%80%94%20%D9%BE%D9%88%D8%B3%D8%AA%D8%B1%D9%87%D8%A7%DB%8C%20%D8%AF%DB%8C%D8%AC%DB%8C%D8%AA%D8%A7%D9%84%20%D8%AE%D9%88%D8%AF%D8%B1%D9%88" target="_blank" rel="noopener">اشتراک‌گذاری در تلگرام</a>
+        <button class="share-button" id="copy-store-link" type="button">کپی لینک فروشگاه</button>
+      </div>
     </section>
     <div class="section-head"><h2>Featured posters</h2><span class="count" id="count">03 ITEMS</span></div>
     <nav class="filters" aria-label="Collections">
@@ -356,6 +370,29 @@
         connectWalletButton.disabled = false;
       }
     });
+
+    const telegramWebApp = window.Telegram && window.Telegram.WebApp;
+    if (telegramWebApp) {
+      document.body.classList.add("telegram-app");
+      try { telegramWebApp.ready(); telegramWebApp.expand(); } catch (_) {}
+    }
+
+    const copyLinkButton = document.getElementById("copy-store-link");
+    if (copyLinkButton) {
+      copyLinkButton.addEventListener("click", async () => {
+        const url = "https://afd6579.github.io/elitemotion-miniapp/";
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(url);
+            copyLinkButton.textContent = "لینک کپی شد";
+          } else {
+            window.prompt("این لینک را کپی کن:", url);
+          }
+        } catch (_) {
+          window.prompt("این لینک را کپی کن:", url);
+        }
+      });
+    }
 
     walletStatus.textContent = "برای اتصال، دکمه را بزن تا ابزار آماده شود.";
     const filters = document.querySelectorAll(".filter");
