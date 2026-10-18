@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
   <meta name="theme-color" content="#090909">
-  <meta name="description" content="ELITEMOTION — پوسترهای دیجیتال لوکس خودرو. هر پوستر ۵ دلار؛ انتخاب دو پوستر با قیمت ۹ دلار.">
+  <meta name="description" content="ELITEMOTION — پوسترهای دیجیتال لوکس خودرو. هر پوستر ۲۵۰ استار؛ دو پوستر با قیمت ۴۵۰ استار.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="ELITEMOTION | Drive Beyond Ordinary">
   <meta property="og:description" content="فروشگاه پوسترهای دیجیتال خودرو با استایل لوکس و سینمایی. هر پوستر ۵ دلار؛ دو پوستر ۹ دلار.">
@@ -97,18 +97,18 @@
     <section class="cart-panel" id="cart-panel">
       <div class="section-head" style="margin:0 0 8px"><h2>سبد خرید</h2><span class="count" id="cart-count">۰ محصول</span></div>
       <div id="cart-items"><p style="color:var(--muted);font-size:12px;margin:8px 0">هنوز محصولی اضافه نشده است.</p></div>
-      <div class="cart-total"><span>جمع محصولات</span><strong id="cart-subtotal">$0.00</strong></div>
-      <div class="cart-total"><span>تخفیف بستهٔ دو پوستر</span><strong id="cart-discount">$0.00</strong></div>
-      <div class="cart-total"><span>مبلغ نهایی</span><strong id="cart-total" style="color:var(--gold)">$0.00</strong></div>
-      <p id="cart-ton-total" style="color:var(--muted);font-size:12px;margin:10px 0">معادل TON پس از دریافت نرخ محاسبه می‌شود.</p>
+      <div class="cart-total"><span>جمع محصولات</span><strong id="cart-subtotal">۰ استار</strong></div>
+      <div class="cart-total"><span>تخفیف بستهٔ دو پوستر</span><strong id="cart-discount">۰ استار</strong></div>
+      <div class="cart-total"><span>مبلغ نهایی</span><strong id="cart-total" style="color:var(--gold)">۰ استار</strong></div>
+      <p id="cart-ton-total" style="color:var(--muted);font-size:12px;margin:10px 0">قیمت‌های Telegram Stars · پرداخت هنوز فعال نیست.</p>
       <button class="buy" id="clear-cart" type="button">خالی کردن سبد</button>
       <p style="font-size:10px;margin:10px 0 0;color:var(--muted)">این سبد فقط پیش‌نمایش محاسبهٔ قیمت است؛ ثبت سفارش و پرداخت هنوز غیرفعال‌اند.</p>
     </section>
     <section class="notice" id="bundle-offer">
       <strong style="color:#eee">ELITEMOTION DUO BUNDLE</strong>
-      <p style="margin:8px 0">Choose any two posters for <strong style="color:var(--gold)">$9.00</strong> instead of $10.00.</p>
-      <p style="margin:0">معادل TON با نرخ زنده محاسبه می‌شود. پرداخت و انتخاب دو محصول برای سفارش هنوز فعال نیست.</p>
-      <p id="bundle-ton-price" style="margin:8px 0 0;color:var(--gold)">معادل TON پس از دریافت نرخ نمایش داده می‌شود.</p>
+      <p style="margin:8px 0">Choose any two posters for <strong style="color:var(--gold)">450 Telegram Stars</strong> instead of 500 Stars.</p>
+      <p style="margin:0">قیمت تکی هر پوستر ۲۵۰ استار است. پرداخت و انتخاب دو محصول برای سفارش هنوز فعال نیست.</p>
+      <p id="bundle-ton-price" style="margin:8px 0 0;color:var(--gold)">قیمت بستهٔ دو پوستر: ۴۵۰ استار.</p>
     </section>
     <div class="notice"><strong style="color:#eee">محصولات فروشگاه</strong><br>۴۳ پوستر در کاتالوگ ثبت شده‌اند. قیمت‌ها فعلاً نمایشی‌اند؛ پرداخت و تحویل خودکار فایل هنوز فعال نیست.</div>
      <div id="detail-message" class="notice" hidden role="status" aria-live="polite"></div>
@@ -167,7 +167,7 @@ products.forEach(function (product) {
   row.className = "buyrow";
   const price = document.createElement("span");
   price.className = "price";
-  price.textContent = "$" + product.usdPrice.toFixed(2);
+  price.textContent = "250 ⭐ XTR";
   const details = document.createElement("button");
   details.className = "buy";
   details.dataset.product = product.id;
@@ -185,7 +185,7 @@ products.forEach(function (product) {
 document.getElementById("count").textContent = String(products.length).padStart(2, "0") + " ITEMS";
 
     function money(value) {
-      return "$" + value.toFixed(2);
+      return Math.round(value).toLocaleString("fa-IR") + " استار";
     }
 
     function calculateCart() {
@@ -193,11 +193,11 @@ document.getElementById("count").textContent = String(products.length).padStart(
       let subtotal = 0;
       cart.forEach((quantity, id) => {
         count += quantity;
-        subtotal += catalog[id].usdPrice * quantity;
+        subtotal += 250 * quantity;
       });
-      // The $9 bundle discount applies to exactly two posters, including two copies of one poster.
+      // 50-Star discount for each pair of posters, including two copies of one poster.
       const bundles = Math.floor(count / 2);
-      const discount = bundles * 1.00;
+      const discount = bundles * 50;
       const total = subtotal - discount;
       return { count, subtotal, discount, total };
     }
@@ -211,7 +211,7 @@ document.getElementById("count").textContent = String(products.length).padStart(
       document.getElementById("cart-subtotal").textContent = money(summary.subtotal);
       document.getElementById("cart-discount").textContent = "−" + money(summary.discount);
       document.getElementById("cart-total").textContent = money(summary.total);
-      const ton = usdToTon(summary.total);
+      const ton = null;
       document.getElementById("cart-ton-total").textContent = ton === null
         ? "معادل TON پس از دریافت نرخ محاسبه می‌شود."
         : "مبلغ تقریبی: " + ton.toFixed(3) + " TON · نرخ مرجع 1 TON ≈ $" + tonUsdRate.toFixed(4);
@@ -233,7 +233,7 @@ document.getElementById("count").textContent = String(products.length).padStart(
         name.textContent = catalog[id].title;
         const price = document.createElement("div");
         price.style.cssText = "color:var(--muted);font-size:11px;margin-top:4px";
-        price.textContent = money(catalog[id].usdPrice) + " each";
+        price.textContent = "250 استار برای هر پوستر";
         info.append(name, price);
 
         const actions = document.createElement("div");
@@ -299,7 +299,7 @@ document.getElementById("count").textContent = String(products.length).padStart(
           " · به‌روزرسانی: " + tonRateUpdatedAt.toLocaleTimeString();
         updatePosterPriceDisplays();
         renderCart();
-      const bundleTon = usdToTon(9);
+      const bundleTon = null;
       document.getElementById("bundle-ton-price").textContent = bundleTon === null
         ? "معادل TON فعلاً در دسترس نیست."
         : "۲ پوستر ≈ " + bundleTon.toFixed(3) + " TON با نرخ مرجع فعلی.";
@@ -322,7 +322,7 @@ document.getElementById("count").textContent = String(products.length).padStart(
         const priceEl = card.querySelector(".price");
         if (!item || !priceEl) return;
         if (!Number.isFinite(item.usdPrice) || item.usdPrice <= 0) {
-          priceEl.textContent = "USD price pending";
+          priceEl.textContent = "250 ⭐ XTR";
           return;
         }
         const ton = usdToTon(item.usdPrice);
