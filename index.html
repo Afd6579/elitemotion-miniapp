@@ -93,7 +93,24 @@
       });
       document.getElementById("count").textContent = String(shown).padStart(2,"0") + " ITEMS";
     }));
-        document.querySelectorAll(".buy").forEach(btn => {
+        
+document.addEventListener("click", function (event) {
+  const btn = event.target.closest(".buy");
+  if (!btn) return;
+
+  const id = btn.getAttribute("data-product");
+  const panel = document.getElementById("detail-message");
+
+  if (panel) {
+    panel.textContent =
+      "Product " + id + " — Checkout is not enabled yet.";
+    panel.hidden = false;
+    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  } else {
+    alert("Product " + id + " selected.");
+  }
+});
+ {
       btn.addEventListener("click", function () {
         const id = this.getAttribute("data-product");
         const message = "Product " + id +
