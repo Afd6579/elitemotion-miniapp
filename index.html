@@ -1,519 +1,72 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-  <meta name="theme-color" content="#090909">
-  <meta name="description" content="ELITEMOTION — پوسترهای دیجیتال لوکس خودرو. هر پوستر ۵ دلار؛ انتخاب دو پوستر با قیمت ۹ دلار.">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="ELITEMOTION | Drive Beyond Ordinary">
-  <meta property="og:description" content="فروشگاه پوسترهای دیجیتال خودرو با استایل لوکس و سینمایی. هر پوستر ۵ دلار؛ دو پوستر ۹ دلار.">
-  <meta property="og:url" content="https://afd6579.github.io/elitemotion-miniapp/">
-  <meta name="twitter:card" content="summary">
-  <title>ELITEMOTION | فروشگاه پوستر دیجیتال خودرو</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    :root{color-scheme:dark;--bg:#090909;--panel:#141414;--line:#292929;--text:#f5f5f5;--muted:#a7a7a7;--red:#d71920;--gold:#b99a55}
-    *{box-sizing:border-box}
-    body{margin:0;background:radial-gradient(ellipse at top,#1a1a1a 0%,var(--bg) 55%);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-    .wrap{max-width:760px;margin:auto;padding:22px 16px 40px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
-    .brand{font-size:20px;letter-spacing:3px;font-weight:800}.brand span{color:var(--gold)}
-    .tag{font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:5px}
-    .pill{border:1px solid #493a1e;color:var(--gold);padding:8px 10px;border-radius:999px;font-size:11px;white-space:nowrap}
-    .share-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-    .share-button{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:10px 13px;border-radius:9px;border:1px solid #493a1e;background:#171717;color:#f5f5f5;font-size:12px;text-decoration:none;cursor:pointer}
-    .share-button.primary{background:#d71920;border-color:#d71920}
-    body.telegram-app .wrap{padding-top:max(16px,env(safe-area-inset-top));padding-bottom:max(28px,env(safe-area-inset-bottom))}
-    .hero{padding:24px 20px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,#181818,#0c0c0c);margin-bottom:22px}
-    .eyebrow{font-size:10px;letter-spacing:3px;color:var(--red);font-weight:bold}
-    h1{font-size:clamp(27px,7vw,42px);line-height:1.04;margin:12px 0}
-    .hero p{color:var(--muted);font-size:14px;line-height:1.6;margin:0;max-width:460px}
-    .section-head{display:flex;justify-content:space-between;align-items:end;margin:24px 0 12px}
-    h2{font-size:17px;margin:0}.count{font-size:11px;color:var(--muted)}
-    .filters{display:flex;gap:8px;overflow:auto;padding-bottom:4px;margin-bottom:14px}
-    .filter{background:#111;border:1px solid var(--line);color:#ddd;border-radius:999px;padding:9px 13px;font-size:12px;white-space:nowrap}
-    .filter.active{background:#251719;border-color:var(--red);color:#fff}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .card{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
-    .art{aspect-ratio:4/5;background:linear-gradient(145deg,#292929,#101010);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-    .art:before{content:"";position:absolute;width:80%;height:42%;border:1px solid #444;transform:skewY(-20deg);border-radius:50%;opacity:.45}
-    .art .car{font-size:40px;filter:grayscale(1);z-index:1}
-    .poster-image{width:100%;height:100%;object-fit:cover;display:block}.art:has(.poster-image):before{display:none}
-    .art .stamp{position:absolute;left:10px;top:10px;font-size:9px;letter-spacing:2px;color:var(--gold);border:1px solid #6a5731;padding:5px 7px;border-radius:3px}
-    .art .placeholder{position:absolute;bottom:10px;right:10px;font-size:8px;letter-spacing:1px;color:#777}
-    .info{padding:12px}
-    .code{font-size:9px;letter-spacing:1.6px;color:var(--gold)}
-    .name{font-size:14px;font-weight:700;margin:7px 0 5px}
-    .desc{font-size:11px;color:var(--muted);line-height:1.4;min-height:30px}
-    .buyrow{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:7px;margin-top:12px}
-    .price{font-size:12px;font-weight:bold;grid-column:1 / -1}
-    .buy,.cart-add{display:inline-flex;justify-content:center;align-items:center;min-height:38px;width:100%;box-sizing:border-box;white-space:nowrap;cursor:pointer;border-radius:8px;padding:9px 8px;font-size:11px;font-weight:bold}
-    .buy{background:var(--red);color:white;border:0}
-    .cart-add{background:#242424;border:1px solid var(--gold);color:#fff}
-    .cart-panel{margin:18px 0;border:1px solid #493a1e;border-radius:16px;padding:15px;background:#111}
-    .cart-line{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
-    .cart-line:last-child{border-bottom:0}
-    .cart-actions{display:flex;gap:8px;align-items:center}
-    .cart-actions button{background:#222;color:#fff;border:1px solid #444;border-radius:6px;padding:5px 9px}
-    .cart-total{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:14px}
-    #ton-connect{margin-top:10px}
-    .notice{margin-top:20px;border:1px solid var(--line);border-radius:14px;padding:13px;color:var(--muted);font-size:11px;line-height:1.6}
-    footer{text-align:center;color:#686868;font-size:10px;letter-spacing:2px;padding:25px 0 0}
-    @media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wrap{padding-top:32px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090909">
+<meta name="description" content="ELITEMOTION — گالری و فروشگاه پوسترهای دیجیتال خودرو. Drive Beyond Ordinary.">
+<meta property="og:title" content="ELITEMOTION | Drive Beyond Ordinary">
+<meta property="og:description" content="پوسترهای دیجیتال خودرو با هویت لوکس و سینمایی.">
+<title>ELITEMOTION | پوستر دیجیتال خودرو</title>
+<style>
+:root{color-scheme:dark;--bg:#090909;--panel:#131313;--line:#292929;--text:#f5f5f5;--muted:#a4a4a4;--red:#d71920;--gold:#b99a55}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% -15%,#222 0,var(--bg) 55%);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+a{color:inherit}.wrap{max-width:1180px;margin:auto;padding:22px 16px 50px}
+header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:5px 0 22px;border-bottom:1px solid var(--line)}
+.brand{font-weight:900;font-size:clamp(19px,4vw,26px);letter-spacing:2px;direction:ltr;text-align:right}.brand span{color:var(--gold)}.tag{font-size:9px;color:var(--muted);letter-spacing:2.5px;margin-top:6px;direction:ltr;text-align:right}
+.top-pill{border:1px solid #514125;color:var(--gold);border-radius:99px;padding:9px 12px;font-size:11px;white-space:nowrap}
+.hero{margin:22px 0 28px;border:1px solid #292929;border-radius:22px;overflow:hidden;background:linear-gradient(110deg,rgba(215,25,32,.12),transparent 45%),linear-gradient(135deg,#1b1b1b,#0d0d0d);padding:clamp(24px,5vw,56px);position:relative}
+.hero:after{content:"EM";position:absolute;left:4%;bottom:-38px;font-size:clamp(120px,25vw,270px);font-weight:900;color:#ffffff05;letter-spacing:-14px;pointer-events:none}
+.eyebrow{color:var(--red);font-size:10px;letter-spacing:3px;direction:ltr;text-align:right;font-weight:bold}
+h1{font-size:clamp(32px,7vw,65px);line-height:1.18;margin:16px 0;max-width:700px}
+.hero p{color:#bdbdbd;line-height:1.9;font-size:14px;max-width:560px;margin:0}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{border:1px solid #3b3b3b;background:#181818;color:white;padding:12px 17px;border-radius:9px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+.btn.primary{background:var(--red);border-color:var(--red)}.btn:disabled{opacity:.55;cursor:not-allowed}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin:24px 0 14px}
+h2{font-size:19px;margin:0}.count{color:var(--muted);font-size:11px;margin-top:6px}
+.search{background:#111;border:1px solid var(--line);border-radius:9px;padding:12px 14px;color:white;min-width:min(100%,260px);font:inherit;font-size:12px;outline:none}.search:focus{border-color:var(--gold)}
+.filters{display:flex;gap:8px;overflow:auto;padding:3px 0 12px}
+.filter{white-space:nowrap;background:#111;border:1px solid var(--line);color:#ddd;border-radius:99px;padding:9px 14px;cursor:pointer;font:inherit;font-size:11px}
+.filter.active{background:#251719;border-color:var(--red);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:var(--panel);min-width:0;transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-3px);border-color:#514125}
+.art{aspect-ratio:4/5;background:linear-gradient(145deg,#252525,#101010);position:relative;overflow:hidden;display:grid;place-items:center}
+.poster-image{width:100%;height:100%;object-fit:cover;display:block}.art:has(.poster-image):before{display:none}
+.art:before{content:"";position:absolute;width:75%;height:36%;border:1px solid #444;transform:skewY(-20deg);border-radius:50%;opacity:.45}
+.stamp{position:absolute;top:9px;left:9px;border:1px solid #79653b;background:#0a0a0ac9;color:#d3b875;padding:5px 7px;border-radius:3px;font-size:8px;letter-spacing:1px;direction:ltr}
+.info{padding:12px}.code{color:var(--gold);font-size:9px;letter-spacing:1.5px;direction:ltr;text-align:right}.name{font-weight:bold;font-size:13px;margin:8px 0}.desc{font-size:10px;line-height:1.7;color:var(--muted);min-height:34px}
+.card-actions{display:flex;gap:7px;margin-top:11px}.card-actions button{flex:1;min-width:0;font:inherit;font-size:10px;padding:10px 6px;border-radius:7px;cursor:pointer}.details{background:#202020;color:#eee;border:1px solid #383838}.add{background:var(--red);border:1px solid var(--red);color:white}
+.cart{margin-top:28px;padding:18px;border:1px solid #514125;background:#101010;border-radius:16px}
+.cart-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.cart-head h2{font-size:17px}.cart-items{margin:12px 0}.cart-line{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:12px}.cart-line button{background:#222;color:white;border:1px solid #444;border-radius:6px;padding:4px 9px;cursor:pointer}
+.notice{margin-top:18px;border:1px solid var(--line);border-radius:13px;padding:14px;color:var(--muted);font-size:11px;line-height:1.9}.notice strong{color:#eee}.notice.warning{border-color:#514125}
+dialog{background:#151515;color:#f5f5f5;border:1px solid #514125;border-radius:16px;max-width:500px;width:calc(100% - 28px);padding:22px}dialog::backdrop{background:#000b}.modal-close{float:left}
+footer{text-align:center;color:#696969;font-size:10px;letter-spacing:2px;padding:30px 0 0;direction:ltr}
+@media(min-width:580px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.wrap{padding-top:30px}}
+@media(min-width:900px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
 </head>
 <body>
-  <main class="wrap">
-    <header>
-      <div><div class="brand">ELITE<span>MOTION</span></div><div class="tag">DRIVE BEYOND ORDINARY</div></div>
-      <div class="pill">DIGITAL ARTWORK</div>
-    </header>
-    <section class="notice" id="wallet-section" style="margin-bottom:18px">
-      <strong style="color:#eee">TON Connect · Mainnet</strong>
-      <p id="wallet-status" style="margin:8px 0;color:var(--muted)">اتصال کیف پول هنوز انجام نشده است.</p>
-      <p id="ton-rate-status" style="margin:8px 0;color:var(--muted)">نرخ TON/USD در حال دریافت است…</p>
-      <button class="filter" id="refresh-ton-rate" type="button">Refresh exchange rate</button>
-      <div id="ton-connect-native" style="margin:12px 0;min-height:48px"></div>
-      <button class="buy" id="ton-connect-manual" type="button">Retry connection</button>
-      <p style="font-size:10px;margin-bottom:0">این مرحله فقط اتصال کیف پول را آزمایش می‌کند؛ هیچ تراکنشی ارسال نمی‌شود.</p>
-    </section>
-    <section class="hero">
-      <div class="eyebrow">AUTOMOTIVE VISUALS / COLLECTION 01</div>
-      <h1>Make your wall<br>move.</h1>
-      <p>Premium digital automotive posters. Carefully curated visuals for enthusiasts, collectors and modern spaces.</p>
-      <div class="share-row">
-        <a class="share-button primary" id="telegram-share" href="https://t.me/share/url?url=https%3A%2F%2Fafd6579.github.io%2Felitemotion-miniapp%2F&text=ELITEMOTION%20%E2%80%94%20%D9%BE%D9%88%D8%B3%D8%AA%D8%B1%D9%87%D8%A7%DB%8C%20%D8%AF%DB%8C%D8%AC%DB%8C%D8%AA%D8%A7%D9%84%20%D8%AE%D9%88%D8%AF%D8%B1%D9%88" target="_blank" rel="noopener">اشتراک‌گذاری در تلگرام</a>
-        <button class="share-button" id="copy-store-link" type="button">کپی لینک فروشگاه</button>
-      </div>
-    </section>
-    <div class="section-head"><h2>Featured posters</h2><span class="count" id="count">03 ITEMS</span></div>
-    <nav class="filters" aria-label="Collections">
-      <button class="filter active" data-filter="all">All posters</button>
-      <button class="filter" data-filter="black-gold">Black &amp; Gold</button>
-      <button class="filter" data-filter="black-white">Black &amp; White</button>
-    </nav>
-    <section class="grid" id="products"></section>
-    <section class="cart-panel" id="cart-panel">
-      <div class="section-head" style="margin:0 0 8px"><h2>سبد خرید</h2><span class="count" id="cart-count">۰ محصول</span></div>
-      <div id="cart-items"><p style="color:var(--muted);font-size:12px;margin:8px 0">هنوز محصولی اضافه نشده است.</p></div>
-      <div class="cart-total"><span>جمع محصولات</span><strong id="cart-subtotal">$0.00</strong></div>
-      <div class="cart-total"><span>تخفیف بستهٔ دو پوستر</span><strong id="cart-discount">$0.00</strong></div>
-      <div class="cart-total"><span>مبلغ نهایی</span><strong id="cart-total" style="color:var(--gold)">$0.00</strong></div>
-      <p id="cart-ton-total" style="color:var(--muted);font-size:12px;margin:10px 0">معادل TON پس از دریافت نرخ محاسبه می‌شود.</p>
-      <button class="buy" id="clear-cart" type="button">خالی کردن سبد</button>
-      <p style="font-size:10px;margin:10px 0 0;color:var(--muted)">این سبد فقط پیش‌نمایش محاسبهٔ قیمت است؛ ثبت سفارش و پرداخت هنوز غیرفعال‌اند.</p>
-    </section>
-    <section class="notice" id="bundle-offer">
-      <strong style="color:#eee">ELITEMOTION DUO BUNDLE</strong>
-      <p style="margin:8px 0">Choose any two posters for <strong style="color:var(--gold)">$9.00</strong> instead of $10.00.</p>
-      <p style="margin:0">معادل TON با نرخ زنده محاسبه می‌شود. پرداخت و انتخاب دو محصول برای سفارش هنوز فعال نیست.</p>
-      <p id="bundle-ton-price" style="margin:8px 0 0;color:var(--gold)">معادل TON پس از دریافت نرخ نمایش داده می‌شود.</p>
-    </section>
-    <div class="notice"><strong style="color:#eee">محصولات فروشگاه</strong><br>۴۳ پوستر در کاتالوگ ثبت شده‌اند. قیمت‌ها فعلاً نمایشی‌اند؛ پرداخت و تحویل خودکار فایل هنوز فعال نیست.</div>
-     <div id="detail-message" class="notice" hidden role="status" aria-live="polite"></div>
+<main class="wrap">
+<header><div><div class="brand">ELITE<span>MOTION</span></div><div class="tag">DRIVE BEYOND ORDINARY</div></div><div class="top-pill">DIGITAL AUTOMOTIVE ART</div></header>
+<section class="hero"><div class="eyebrow">AUTOMOTIVE VISUALS / COLLECTION 01</div><h1>قدرت خودرو،<br>در قاب هنر.</h1><p>گالری پوسترهای دیجیتال خودرو با حال‌وهوای لوکس، اسپرت و سینمایی. مجموعه‌ات را پیدا کن و برای خرید آماده شو.</p><div class="hero-actions"><a class="btn primary" href="#catalog">مشاهدهٔ پوسترها</a><a class="btn" href="#about">دربارهٔ فروشگاه</a></div></section>
+<section id="catalog">
+<div class="toolbar"><div><h2>کاتالوگ پوسترها</h2><div class="count" id="count">۴۳ محصول</div></div><input class="search" id="search" type="search" placeholder="جست‌وجوی خودرو یا کد محصول…" aria-label="جست‌وجوی پوستر"></div>
+<nav class="filters" aria-label="دسته‌بندی"><button class="filter active" data-filter="all">همهٔ پوسترها</button><button class="filter" data-filter="black-gold">Black &amp; Gold</button><button class="filter" data-filter="black-white">Black &amp; White</button></nav>
+<div class="grid" id="products"></div>
+</section>
+<section class="cart" id="cart"><div class="cart-head"><h2>سبد انتخاب</h2><span class="count" id="cart-count">۰ محصول</span></div><div class="cart-items" id="cart-items">هنوز محصولی انتخاب نکرده‌ای.</div><div class="notice warning"><strong>فروش و پرداخت آنلاین هنوز فعال نشده است.</strong><br>این نسخه روی GitHub Pages اجرا می‌شود که فقط فایل‌های ایستا را میزبانی می‌کند. ثبت سفارش واقعی، پرداخت بانکی و تحویل خودکار فایل تا آماده شدن سرور امن غیرفعال است. قیمت‌ها نیز تا تأیید نهایی نمایش داده نمی‌شوند.</div><div style="margin-top:12px"><button class="btn" id="clear-cart">پاک کردن سبد</button></div></section>
+<section class="notice" id="about"><strong>دربارهٔ ELITEMOTION</strong><br>Drive Beyond Ordinary. فروشگاه تخصصی پوسترهای دیجیتال خودرو. نسخهٔ فعلی برای نمایش کاتالوگ و بررسی ظاهر سایت منتشر شده است؛ هنوز فروشگاه عملیاتی برای دریافت پول یا تحویل فایل اصلی نیست.</section>
 <footer>ELITEMOTION · DRIVE BEYOND ORDINARY</footer>
-  </main>
-  
-  <script>
-    const tg = window.Telegram && window.Telegram.WebApp;
-    if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor("#090909"); tg.setBackgroundColor("#090909"); } catch (_) {} }
-    const walletStatus = document.getElementById("wallet-status");
-    const tonRateStatus = document.getElementById("ton-rate-status");
-    const refreshTonRateButton = document.getElementById("refresh-ton-rate");
-    const connectWalletButton = document.getElementById("ton-connect-manual");
-    let tonUi = null;
-    let tonUsdRate = null;
-    let tonRateUpdatedAt = null;
-
-    const cart = new Map();
-    const products = [{"id":"EM-001","title":"AUDI","image":"AUDI.png","collection":"black-gold","usdPrice":5},{"id":"EM-002","title":"Audi","image":"Audi .png","collection":"black-gold","usdPrice":5},{"id":"EM-003","title":"BMW","image":"BMW .png","collection":"black-gold","usdPrice":5},{"id":"EM-004","title":"BMW M4","image":"BMW M4.png","collection":"black-gold","usdPrice":5},{"id":"EM-005","title":"BMW TRILOGY","image":"BMW TRILOGY .png","collection":"black-gold","usdPrice":5},{"id":"EM-006","title":"BMW TRILOGY(2)","image":"BMW TRILOGY(2).png","collection":"black-gold","usdPrice":5},{"id":"EM-007","title":"BMW TRILOGY","image":"BMW TRILOGY.png","collection":"black-gold","usdPrice":5},{"id":"EM-008","title":"Benz C63","image":"Benz C63.png","collection":"black-gold","usdPrice":5},{"id":"EM-009","title":"C63 2014","image":"C63 2014.png","collection":"black-gold","usdPrice":5},{"id":"EM-010","title":"CHIRON 2026","image":"CHIRON 2026.png","collection":"black-gold","usdPrice":5},{"id":"EM-011","title":"Comparison (3)","image":"Comparison (3).png","collection":"black-gold","usdPrice":5},{"id":"EM-012","title":"Comparison (4)","image":"Comparison (4).png","collection":"black-gold","usdPrice":5},{"id":"EM-013","title":"Comparison","image":"Comparison .png","collection":"black-gold","usdPrice":5},{"id":"EM-014","title":"Comparison(2)","image":"Comparison(2).png","collection":"black-gold","usdPrice":5},{"id":"EM-015","title":"Dodge Challenger SRT","image":"Dodge Challenger SRT.png","collection":"black-gold","usdPrice":5},{"id":"EM-016","title":"Dodge Charger 2014","image":"Dodge Charger 2014.jpg","collection":"black-gold","usdPrice":5},{"id":"EM-017","title":"Dodge Charger 2026 Mansory","image":"Dodge Charger 2026 Mansory.png","collection":"black-gold","usdPrice":5},{"id":"EM-018","title":"E200 2026","image":"E200 2026.png","collection":"black-gold","usdPrice":5},{"id":"EM-019","title":"Ford Mustang","image":"Ford Mustang .png","collection":"black-gold","usdPrice":5},{"id":"EM-020","title":"G63","image":"G63.png","collection":"black-gold","usdPrice":5},{"id":"EM-021","title":"Hyundai","image":"Hyundai .png","collection":"black-gold","usdPrice":5},{"id":"EM-022","title":"LX700","image":"LX700.png","collection":"black-gold","usdPrice":5},{"id":"EM-023","title":"Lamborghini (1)","image":"Lamborghini (1).png","collection":"black-gold","usdPrice":5},{"id":"EM-024","title":"Lamborghini","image":"Lamborghini .png","collection":"black-gold","usdPrice":5},{"id":"EM-025","title":"Land Cruiser","image":"Land Cruiser .png","collection":"black-gold","usdPrice":5},{"id":"EM-026","title":"Lexus lx570","image":"Lexus lx570 .png","collection":"black-gold","usdPrice":5},{"id":"EM-027","title":"Mansory","image":"Mansory.png","collection":"black-gold","usdPrice":5},{"id":"EM-028","title":"Mazda","image":"Mazda .png","collection":"black-gold","usdPrice":5},{"id":"EM-029","title":"Mazda","image":"Mazda.png","collection":"black-gold","usdPrice":5},{"id":"EM-030","title":"Mercedes-Benz","image":"Mercedes-Benz .png","collection":"black-gold","usdPrice":5},{"id":"EM-031","title":"Mercedes-Benz AMG","image":"Mercedes-Benz AMG.png","collection":"black-gold","usdPrice":5},{"id":"EM-032","title":"Mercedes-Benz","image":"Mercedes-Benz.png","collection":"black-gold","usdPrice":5},{"id":"EM-033","title":"NISSAN","image":"NISSAN.png","collection":"black-gold","usdPrice":5},{"id":"EM-034","title":"Nissan Gtr","image":"Nissan Gtr.png","collection":"black-gold","usdPrice":5},{"id":"EM-035","title":"Nissan Poster","image":"Nissan Poster .png","collection":"black-gold","usdPrice":5},{"id":"EM-036","title":"Porsche 911 GT3(1)","image":"Porsche 911 GT3(1).png","collection":"black-gold","usdPrice":5},{"id":"EM-037","title":"Porsche 911 GT3","image":"Porsche 911 GT3.png","collection":"black-gold","usdPrice":5},{"id":"EM-038","title":"Rolls-Royce","image":"Rolls-Royce .png","collection":"black-gold","usdPrice":5},{"id":"EM-039","title":"Shelby GT500 1967","image":"Shelby GT500 1967.png","collection":"black-gold","usdPrice":5},{"id":"EM-040","title":"Shelby GT500","image":"Shelby GT500.png","collection":"black-gold","usdPrice":5},{"id":"EM-041","title":"Toyota","image":"Toyota .png","collection":"black-gold","usdPrice":5},{"id":"EM-042","title":"Toyota Poster","image":"Toyota Poster.png","collection":"black-gold","usdPrice":5},{"id":"EM-043","title":"Toyota","image":"Toyota.png","collection":"black-gold","usdPrice":5}];
-    const catalog = Object.fromEntries(products.map(p => [p.id, { title: p.title, usdPrice: p.usdPrice }]));
-
-const productGrid = document.getElementById("products");
-products.forEach(function (product) {
-  const card = document.createElement("article");
-  card.className = "card";
-  card.dataset.product = product.id;
-  card.dataset.collection = product.collection;
-
-  const art = document.createElement("div");
-  art.className = "art";
-  const image = document.createElement("img");
-  image.className = "poster-image";
-  image.src = "https://afd6579.github.io/elitemotion-miniapp/" + encodeURIComponent(product.image) + "?v=2";
-  image.alt = product.title + " — ELITEMOTION poster preview";
-  image.loading = "lazy";
-  image.decoding = "async";
-  const stamp = document.createElement("span");
-  stamp.className = "stamp";
-  stamp.textContent = product.collection === "black-white" ? "BLACK & WHITE" : "BLACK & GOLD";
-  art.append(image, stamp);
-
-  const info = document.createElement("div");
-  info.className = "info";
-  const code = document.createElement("div");
-  code.className = "code";
-  code.textContent = product.id;
-  const name = document.createElement("div");
-  name.className = "name";
-  name.textContent = product.title;
-  const desc = document.createElement("div");
-  desc.className = "desc";
-  desc.textContent = "پوستر دیجیتال خودرو · ELITEMOTION";
-  info.append(code, name, desc);
-
-  const row = document.createElement("div");
-  row.className = "buyrow";
-  const price = document.createElement("span");
-  price.className = "price";
-  price.textContent = "$" + product.usdPrice.toFixed(2);
-  const details = document.createElement("button");
-  details.className = "buy";
-  details.dataset.product = product.id;
-  details.type = "button";
-  details.textContent = "مشخصات";
-  const add = document.createElement("button");
-  add.className = "cart-add";
-  add.dataset.add = product.id;
-  add.type = "button";
-  add.textContent = "افزودن به سبد";
-  row.append(price, details, add);
-  card.append(art, info, row);
-  productGrid.appendChild(card);
-});
-document.getElementById("count").textContent = String(products.length).padStart(2, "0") + " ITEMS";
-
-    function money(value) {
-      return "$" + value.toFixed(2);
-    }
-
-    function calculateCart() {
-      let count = 0;
-      let subtotal = 0;
-      cart.forEach((quantity, id) => {
-        count += quantity;
-        subtotal += catalog[id].usdPrice * quantity;
-      });
-      // The $9 bundle discount applies to exactly two posters, including two copies of one poster.
-      const bundles = Math.floor(count / 2);
-      const discount = bundles * 1.00;
-      const total = subtotal - discount;
-      return { count, subtotal, discount, total };
-    }
-
-    function renderCart() {
-      const itemsEl = document.getElementById("cart-items");
-      itemsEl.replaceChildren();
-      const ids = Array.from(cart.keys()).filter(id => cart.get(id) > 0);
-      const summary = calculateCart();
-      document.getElementById("cart-count").textContent = summary.count + " محصول";
-      document.getElementById("cart-subtotal").textContent = money(summary.subtotal);
-      document.getElementById("cart-discount").textContent = "−" + money(summary.discount);
-      document.getElementById("cart-total").textContent = money(summary.total);
-      const ton = usdToTon(summary.total);
-      document.getElementById("cart-ton-total").textContent = ton === null
-        ? "معادل TON پس از دریافت نرخ محاسبه می‌شود."
-        : "مبلغ تقریبی: " + ton.toFixed(3) + " TON · نرخ مرجع 1 TON ≈ $" + tonUsdRate.toFixed(4);
-
-      if (!ids.length) {
-        const empty = document.createElement("p");
-        empty.style.cssText = "color:var(--muted);font-size:12px;margin:8px 0";
-        empty.textContent = "هنوز محصولی اضافه نشده است.";
-        itemsEl.appendChild(empty);
-        return;
-      }
-
-      ids.forEach(id => {
-        const line = document.createElement("div");
-        line.className = "cart-line";
-        const info = document.createElement("div");
-        const name = document.createElement("strong");
-        name.style.fontSize = "12px";
-        name.textContent = catalog[id].title;
-        const price = document.createElement("div");
-        price.style.cssText = "color:var(--muted);font-size:11px;margin-top:4px";
-        price.textContent = money(catalog[id].usdPrice) + " each";
-        info.append(name, price);
-
-        const actions = document.createElement("div");
-        actions.className = "cart-actions";
-        const minus = document.createElement("button");
-        minus.type = "button";
-        minus.textContent = "−";
-        minus.setAttribute("aria-label", "کاهش تعداد " + catalog[id].title);
-        minus.addEventListener("click", () => {
-          const next = (cart.get(id) || 0) - 1;
-          if (next <= 0) cart.delete(id); else cart.set(id, next);
-          renderCart();
-        });
-        const quantity = document.createElement("span");
-        quantity.textContent = String(cart.get(id));
-        quantity.style.minWidth = "16px";
-        quantity.style.textAlign = "center";
-        const plus = document.createElement("button");
-        plus.type = "button";
-        plus.textContent = "+";
-        plus.setAttribute("aria-label", "افزایش تعداد " + catalog[id].title);
-        plus.addEventListener("click", () => {
-          cart.set(id, (cart.get(id) || 0) + 1);
-          renderCart();
-        });
-        actions.append(minus, quantity, plus);
-        line.append(info, actions);
-        itemsEl.appendChild(line);
-      });
-    }
-
-    document.querySelectorAll("[data-add]").forEach(button => {
-      button.addEventListener("click", () => {
-        const id = button.getAttribute("data-add");
-        if (!catalog[id]) return;
-        cart.set(id, (cart.get(id) || 0) + 1);
-        renderCart();
-        document.getElementById("cart-panel").scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    });
-
-    document.getElementById("clear-cart").addEventListener("click", () => {
-      cart.clear();
-      renderCart();
-    });
-
-    // Read-only market quote for display only. This does not initiate a wallet transaction.
-    async function refreshTonUsdRate() {
-      tonRateStatus.textContent = "در حال دریافت نرخ بازار TON/USD…";
-      refreshTonRateButton.disabled = true;
-      try {
-        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=the-open-network&vs_currencies=usd", {
-          cache: "no-store",
-          headers: { "accept": "application/json" }
-        });
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        const data = await response.json();
-        const rate = Number(data && data["the-open-network"] && data["the-open-network"].usd);
-        if (!Number.isFinite(rate) || rate <= 0) throw new Error("نرخ معتبر دریافت نشد");
-        tonUsdRate = rate;
-        tonRateUpdatedAt = new Date();
-        tonRateStatus.textContent = "نرخ تقریبی بازار: 1 TON ≈ $" + rate.toFixed(4) +
-          " · به‌روزرسانی: " + tonRateUpdatedAt.toLocaleTimeString();
-        updatePosterPriceDisplays();
-        renderCart();
-      const bundleTon = usdToTon(9);
-      document.getElementById("bundle-ton-price").textContent = bundleTon === null
-        ? "معادل TON فعلاً در دسترس نیست."
-        : "۲ پوستر ≈ " + bundleTon.toFixed(3) + " TON با نرخ مرجع فعلی.";
-      } catch (error) {
-        tonRateStatus.textContent = "نرخ زنده در دسترس نیست. برای قیمت نهایی به این مقدار تکیه نکن؛ دوباره تلاش کن.";
-      } finally {
-        refreshTonRateButton.disabled = false;
-      }
-    }
-
-    function usdToTon(usdPrice) {
-      if (!Number.isFinite(tonUsdRate) || tonUsdRate <= 0 || !Number.isFinite(usdPrice) || usdPrice <= 0) return null;
-      return usdPrice / tonUsdRate;
-    }
-
-    function updatePosterPriceDisplays() {
-      document.querySelectorAll(".card[data-product]").forEach(card => {
-        const id = card.getAttribute("data-product");
-        const item = posterDetails[id];
-        const priceEl = card.querySelector(".price");
-        if (!item || !priceEl) return;
-        if (!Number.isFinite(item.usdPrice) || item.usdPrice <= 0) {
-          priceEl.textContent = "USD price pending";
-          return;
-        }
-        const ton = usdToTon(item.usdPrice);
-        priceEl.textContent = ton === null
-          ? "$" + item.usdPrice.toFixed(2) + " · TON rate unavailable"
-          : "$" + item.usdPrice.toFixed(2) + " ≈ " + ton.toFixed(3) + " TON";
-      });
-    }
-
-    refreshTonRateButton.addEventListener("click", refreshTonUsdRate);
-    refreshTonUsdRate();
-
-    function loadTonConnectSdk() {
-      return new Promise((resolve, reject) => {
-        if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) return resolve();
-        const sources = [
-          "https://unpkg.com/@tonconnect/ui@3.0.2/dist/tonconnect-ui.min.js",
-          "https://cdn.jsdelivr.net/npm/@tonconnect/ui@3.0.2/dist/tonconnect-ui.min.js"
-        ];
-        let index = 0;
-        const next = () => {
-          if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) return resolve();
-          if (index >= sources.length) return reject(new Error("کتابخانه بارگذاری نشد؛ اتصال به CDN را بررسی کن."));
-          const script = document.createElement("script");
-          let finished = false;
-          const timer = setTimeout(() => {
-            if (finished) return;
-            finished = true;
-            script.remove();
-            next();
-          }, 10000);
-          script.src = sources[index++];
-          script.onload = () => {
-            if (finished) return;
-            finished = true;
-            clearTimeout(timer);
-            if (window.TON_CONNECT_UI && window.TON_CONNECT_UI.TonConnectUI) resolve();
-            else next();
-          };
-          script.onerror = () => {
-            if (finished) return;
-            finished = true;
-            clearTimeout(timer);
-            next();
-          };
-          document.head.appendChild(script);
-        };
-        next();
-      });
-    }
-
-    async function ensureTonConnect() {
-      if (tonUi) return tonUi;
-      await loadTonConnectSdk();
-      tonUi = new window.TON_CONNECT_UI.TonConnectUI({
-        manifestUrl: "https://afd6579.github.io/elitemotion-miniapp/tonconnect-manifest.json",
-        buttonRootId: null,
-        uiPreferences: { theme: "DARK" }
-      });
-      tonUi.onStatusChange(wallet => {
-        if (!wallet) {
-          walletStatus.textContent = "کیف پول متصل نیست. دکمه رسمی را بزن.";
-          return;
-        }
-        const address = wallet.account.address || "";
-        const shortAddress = address.length > 16 ? address.slice(0, 8) + "…" + address.slice(-6) : address;
-        const networkLabel = wallet.account.chain === "-239" ? "Mainnet" : (wallet.account.chain === "-3" ? "Testnet" : "شبکه نامشخص");
-        walletStatus.textContent = "کیف پول متصل شد: " + shortAddress + " · " + networkLabel + ". پرداخت همچنان غیرفعال است.";
-      });
-      return tonUi;
-    }
-
-    connectWalletButton.addEventListener("click", async function () {
-      connectWalletButton.disabled = true;
-      walletStatus.textContent = "در حال آماده‌سازی اتصال...";
-      try {
-        const ui = await ensureTonConnect();
-        walletStatus.textContent = "در حال باز کردن پنجره انتخاب کیف پول...";
-        await ui.openModal();
-        walletStatus.textContent = "پنجره اتصال باز شد؛ Tonkeeper را انتخاب کن. هیچ پرداختی انجام نمی‌شود.";
-      } catch (error) {
-        walletStatus.textContent = "خطای اتصال: " + (error && error.message ? error.message : "بارگذاری ناموفق بود.");
-      } finally {
-        connectWalletButton.disabled = false;
-      }
-    });
-
-    const telegramWebApp = window.Telegram && window.Telegram.WebApp;
-    if (telegramWebApp) {
-      document.body.classList.add("telegram-app");
-      try { telegramWebApp.ready(); telegramWebApp.expand(); } catch (_) {}
-    }
-
-    const copyLinkButton = document.getElementById("copy-store-link");
-    if (copyLinkButton) {
-      copyLinkButton.addEventListener("click", async () => {
-        const url = "https://afd6579.github.io/elitemotion-miniapp/";
-        try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(url);
-            copyLinkButton.textContent = "لینک کپی شد";
-          } else {
-            window.prompt("این لینک را کپی کن:", url);
-          }
-        } catch (_) {
-          window.prompt("این لینک را کپی کن:", url);
-        }
-      });
-    }
-
-    walletStatus.textContent = "برای اتصال، دکمه را بزن تا ابزار آماده شود.";
-    const filters = document.querySelectorAll(".filter");
-    filters.forEach(btn => btn.addEventListener("click", () => {
-      const cards = document.querySelectorAll("#products .card");
-      filters.forEach(b => b.classList.toggle("active", b === btn));
-      let shown = 0;
-      cards.forEach(card => {
-        const visible = btn.dataset.filter === "all" || card.dataset.collection === btn.dataset.filter;
-        card.hidden = !visible;
-        if (visible) shown++;
-      });
-      document.getElementById("count").textContent = String(shown).padStart(2,"0") + " ITEMS";
-    }));
-        
-const posterDetails = Object.fromEntries(products.map(p => [p.id, {
-  title: p.title,
-  collection: p.collection === "black-white" ? "Black & White" : "Black & Gold",
-  description: "پوستر دیجیتال خودرو از مجموعه ELITEMOTION.",
-  format: "Digital poster file",
-  price: "$" + p.usdPrice.toFixed(2),
-  usdPrice: p.usdPrice
-}]));
-
-
-
-document.querySelectorAll(".buy[data-product]").forEach(function (btn) {
-  const productCard = btn.closest(".card");
-  if (productCard) productCard.setAttribute("data-product", btn.getAttribute("data-product"));
-  btn.addEventListener("click", function () {
-    const id = btn.getAttribute("data-product");
-    const item = posterDetails[id];
-    const panel = document.getElementById("detail-message");
-
-    if (!panel) {
-      alert("بخش مشخصات پوستر در صفحه پیدا نشد. صفحه را دوباره بارگذاری کنید.");
-      return;
-    }
-
-    panel.replaceChildren();
-
-    if (!item) {
-      const error = document.createElement("p");
-      error.textContent = "برای این شناسه اطلاعاتی ثبت نشده است: " + (id || "بدون شناسه");
-      panel.appendChild(error);
-      panel.hidden = false;
-      panel.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-
-    const heading = document.createElement("h3");
-    heading.textContent = item.title;
-    const collection = document.createElement("p");
-    collection.textContent = "مجموعه: " + item.collection;
-    const description = document.createElement("p");
-    description.textContent = item.description;
-    const format = document.createElement("p");
-    format.textContent = "کد محصول: " + id + " · " + item.format;
-    const price = document.createElement("p");
-    const estimatedTon = usdToTon(item.usdPrice);
-    price.textContent = Number.isFinite(item.usdPrice) && item.usdPrice > 0
-      ? "قیمت: $" + item.usdPrice.toFixed(2) + (estimatedTon === null ? " · نرخ TON فعلاً در دسترس نیست" : " · حدود " + estimatedTon.toFixed(3) + " TON")
-      : "قیمت دلاری این محصول هنوز تعیین نشده است.";
-    const rateNote = document.createElement("p");
-    rateNote.textContent = tonUsdRate
-      ? "نرخ مرجع فعلی: 1 TON ≈ $" + tonUsdRate.toFixed(4) + "؛ مبلغ TON تخمینی است و هنگام پرداخت باید دوباره محاسبه شود."
-      : "نرخ بازار دریافت نشده؛ معادل TON فعلاً قابل محاسبه نیست.";
-    const note = document.createElement("p");
-    note.textContent = "پرداخت آنلاین و تحویل خودکار فایل هنوز فعال نیست.";
-    const close = document.createElement("button");
-    close.type = "button";
-    close.className = "buy";
-    close.textContent = "بستن مشخصات";
-    close.addEventListener("click", function () {
-      panel.hidden = true;
-    });
-
-    panel.append(heading, collection, description, format, price, rateNote, note, close);
-    panel.hidden = false;
-    panel.scrollIntoView({ behavior: "smooth", block: "center" });
-  });
-});
-  </script>
-</body>
-</html>
+</main>
+<dialog id="detail"><button class="btn modal-close" id="close-detail">بستن</button><div id="detail-content" style="padding-top:38px"></div></dialog>
+<script>
+const products = [{"id":"EM-001","title":"AUDI","image":"AUDI.png","collection":"black-gold"},{"id":"EM-002","title":"Audi","image":"Audi .png","collection":"black-gold"},{"id":"EM-003","title":"BMW","image":"BMW .png","collection":"black-gold"},{"id":"EM-004","title":"BMW M4","image":"BMW M4.png","collection":"black-gold"},{"id":"EM-005","title":"BMW TRILOGY","image":"BMW TRILOGY .png","collection":"black-gold"},{"id":"EM-006","title":"BMW TRILOGY (2)","image":"BMW TRILOGY(2).png","collection":"black-gold"},{"id":"EM-007","title":"BMW TRILOGY","image":"BMW TRILOGY.png","collection":"black-gold"},{"id":"EM-008","title":"Mercedes-Benz C63","image":"Benz C63.png","collection":"black-gold"},{"id":"EM-009","title":"C63 2014","image":"C63 2014.png","collection":"black-gold"},{"id":"EM-010","title":"CHIRON 2026","image":"CHIRON 2026.png","collection":"black-gold"},{"id":"EM-011","title":"Comparison (3)","image":"Comparison (3).png","collection":"black-gold"},{"id":"EM-012","title":"Comparison (4)","image":"Comparison (4).png","collection":"black-gold"},{"id":"EM-013","title":"Comparison","image":"Comparison .png","collection":"black-gold"},{"id":"EM-014","title":"Comparison (2)","image":"Comparison(2).png","collection":"black-gold"},{"id":"EM-015","title":"Dodge Challenger SRT","image":"Dodge Challenger SRT.png","collection":"black-gold"},{"id":"EM-016","title":"Dodge Charger 2014","image":"Dodge Charger 2014.jpg","collection":"black-gold"},{"id":"EM-017","title":"Dodge Charger 2026 Mansory","image":"Dodge Charger 2026 Mansory.png","collection":"black-gold"},{"id":"EM-018","title":"E200 2026","image":"E200 2026.png","collection":"black-gold"},{"id":"EM-019","title":"Ford Mustang","image":"Ford Mustang .png","collection":"black-gold"},{"id":"EM-020","title":"Mercedes-AMG G63","image":"G63.png","collection":"black-gold"},{"id":"EM-021","title":"Hyundai","image":"Hyundai .png","collection":"black-gold"},{"id":"EM-022","title":"LX700","image":"LX700.png","collection":"black-gold"},{"id":"EM-023","title":"Lamborghini (1)","image":"Lamborghini (1).png","collection":"black-gold"},{"id":"EM-024","title":"Lamborghini","image":"Lamborghini .png","collection":"black-gold"},{"id":"EM-025","title":"Land Cruiser","image":"Land Cruiser .png","collection":"black-gold"},{"id":"EM-026","title":"Lexus LX570","image":"Lexus lx570 .png","collection":"black-gold"},{"id":"EM-027","title":"Mansory","image":"Mansory.png","collection":"black-gold"},{"id":"EM-028","title":"Mazda","image":"Mazda .png","collection":"black-gold"},{"id":"EM-029","title":"Mazda","image":"Mazda.png","collection":"black-gold"},{"id":"EM-030","title":"Mercedes-Benz","image":"Mercedes-Benz .png","collection":"black-gold"},{"id":"EM-031","title":"Mercedes-Benz AMG","image":"Mercedes-Benz AMG.png","collection":"black-gold"},{"id":"EM-032","title":"Mercedes-Benz","image":"Mercedes-Benz.png","collection":"black-gold"},{"id":"EM-033","title":"NISSAN","image":"NISSAN.png","collection":"black-gold"},{"id":"EM-034","title":"Nissan GT-R","image":"Nissan Gtr.png","collection":"black-gold"},{"id":"EM-035","title":"Nissan Poster","image":"Nissan Poster .png","collection":"black-gold"},{"id":"EM-036","title":"Porsche 911 GT3 (1)","image":"Porsche 911 GT3(1).png","collection":"black-gold"},{"id":"EM-037","title":"Porsche 911 GT3","image":"Porsche 911 GT3.png","collection":"black-gold"},{"id":"EM-038","title":"Rolls-Royce","image":"Rolls-Royce .png","collection":"black-gold"},{"id":"EM-039","title":"Shelby GT500 1967","image":"Shelby GT500 1967.png","collection":"black-gold"},{"id":"EM-040","title":"Shelby GT500","image":"Shelby GT500.png","collection":"black-gold"},{"id":"EM-041","title":"Toyota","image":"Toyota .png","collection":"black-gold"},{"id":"EM-042","title":"Toyota Poster","image":"Toyota Poster.png","collection":"black-gold"},{"id":"EM-043","title":"Toyota","image":"Toyota.png","collection":"black-gold"}];
+const grid=document.getElementById("products"),cart=new Map();let activeFilter="all";
+const fmtNum=n=>new Intl.NumberFormat("fa-IR").format(n);
+function renderProducts(){const query=document.getElementById("search").value.trim().toLowerCase();grid.replaceChildren();let shown=0;products.filter(p=>(activeFilter==="all"||p.collection===activeFilter)&&(!query||(p.title+" "+p.id).toLowerCase().includes(query))).forEach(p=>{shown++;const card=document.createElement("article");card.className="card";const art=document.createElement("div");art.className="art";const img=document.createElement("img");img.className="poster-image";img.loading="lazy";img.alt="پیش‌نمایش پوستر "+p.title;img.src=encodeURI("./"+p.image);img.onerror=()=>{img.remove();art.style.background="linear-gradient(145deg,#292929,#101010)";};const stamp=document.createElement("span");stamp.className="stamp";stamp.textContent=p.collection==="black-white"?"BLACK & WHITE":"ELITEMOTION";art.append(img,stamp);const info=document.createElement("div");info.className="info";const code=document.createElement("div");code.className="code";code.textContent=p.id;const name=document.createElement("div");name.className="name";name.textContent=p.title;const desc=document.createElement("div");desc.className="desc";desc.textContent="پوستر دیجیتال خودرو · فایل اصلی پس از فعال شدن فروش";info.append(code,name,desc);const actions=document.createElement("div");actions.className="card-actions";const detail=document.createElement("button");detail.className="details";detail.textContent="مشخصات";detail.onclick=()=>showDetail(p);const add=document.createElement("button");add.className="add";add.textContent="انتخاب";add.onclick=()=>{cart.set(p.id,(cart.get(p.id)||0)+1);renderCart();document.getElementById("cart").scrollIntoView({behavior:"smooth",block:"nearest"});};actions.append(detail,add);card.append(art,info,actions);grid.append(card);});document.getElementById("count").textContent=fmtNum(shown)+" محصول";}
+function showDetail(p){const box=document.getElementById("detail-content");box.replaceChildren();const h=document.createElement("h2");h.textContent=p.title;const code=document.createElement("p");code.textContent="کد محصول: "+p.id;const desc=document.createElement("p");desc.textContent="پوستر دیجیتال خودرو از مجموعه ELITEMOTION. قیمت و خرید آنلاین پس از تکمیل زیرساخت فروش اعلام می‌شود.";box.append(h,code,desc);document.getElementById("detail").showModal();}
+function renderCart(){const el=document.getElementById("cart-items");el.replaceChildren();let total=0;cart.forEach((qty,id)=>{const p=products.find(x=>x.id===id);total+=qty;const line=document.createElement("div");line.className="cart-line";const label=document.createElement("span");label.textContent=p.title+" × "+fmtNum(qty);const remove=document.createElement("button");remove.textContent="حذف";remove.onclick=()=>{cart.delete(id);renderCart();};line.append(label,remove);el.append(line);});if(!total)el.textContent="هنوز محصولی انتخاب نکرده‌ای.";document.getElementById("cart-count").textContent=fmtNum(total)+" محصول";}
+document.getElementById("search").addEventListener("input",renderProducts);document.querySelectorAll("[data-filter]").forEach(btn=>btn.addEventListener("click",()=>{activeFilter=btn.dataset.filter;document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b===btn));renderProducts();}));document.getElementById("clear-cart").onclick=()=>{cart.clear();renderCart();};document.getElementById("close-detail").onclick=()=>document.getElementById("detail").close();renderProducts();renderCart();
+</script>
+</body></html>
