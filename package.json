@@ -1,0 +1,14 @@
+{
+  "name": "elitemotion-telegram-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Telegram launcher bot for the ELITEMOTION digital poster Mini App",
+  "type": "module",
+  "scripts": {
+    "start": "node bot.js",
+    "check": "node --check bot.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
