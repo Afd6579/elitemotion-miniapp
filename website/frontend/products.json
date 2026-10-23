@@ -1,0 +1,40 @@
+{
+  "products": [
+    {
+      "id": "poster-001",
+      "name": "Mercedes-AMG G 63",
+      "description": "A bold monochrome study of the iconic performance SUV.",
+      "collection": "Black & White",
+      "code": "BW-006",
+      "priceToman": 150000,
+      "priceUSD": 4.99,
+      "previewUrl": "",
+      "active": true,
+      "position": 1
+    },
+    {
+      "id": "poster-002",
+      "name": "Lamborghini Revuelto",
+      "description": "Sharp lines and hybrid-era supercar presence.",
+      "collection": "Black & Gold",
+      "code": "BG-001",
+      "priceToman": 150000,
+      "priceUSD": 4.99,
+      "previewUrl": "",
+      "active": true,
+      "position": 2
+    },
+    {
+      "id": "poster-003",
+      "name": "Mercedes-Benz Performance Triptych",
+      "description": "Three coordinated automotive views presented as one digital artwork.",
+      "collection": "Black & Gold",
+      "code": "BG-TRI-001",
+      "priceToman": 250000,
+      "priceUSD": 7.99,
+      "previewUrl": "",
+      "active": true,
+      "position": 3
+    }
+  ]
+}
