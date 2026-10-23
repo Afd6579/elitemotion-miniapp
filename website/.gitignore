@@ -1,0 +1,14 @@
+node_modules/
+**/node_modules/
+.env
+**/.env
+backend/data/*.sqlite
+backend/data/*.sqlite-shm
+backend/data/*.sqlite-wal
+backend/private/posters/*
+!backend/private/posters/.gitkeep
+uploads/
+upload/
+.DS_Store
+Thumbs.db
+*.log
