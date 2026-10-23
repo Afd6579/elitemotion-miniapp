@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="description" content="ELITEMOTION — premium digital automotive posters. Drive Beyond Ordinary.">
+  <title>ELITEMOTION — Drive Beyond Ordinary</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="ELITEMOTION home"><span class="brand-mark">E</span><span>ELITE<span class="red">MOTION</span><small>DRIVE BEYOND ORDINARY</small></span></a>
+    <nav><a href="#collection">Collections</a><a href="#shop">Shop</a><a href="#about">About</a></nav>
+    <div class="header-actions"><button id="currency-toggle" class="text-button" type="button">USD / تومان</button><button id="cart-open" class="cart-button" type="button">BAG <span id="cart-count">0</span></button></div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-copy"><p class="eyebrow">AUTOMOTIVE ART · DIGITAL EDITION</p><h1>Drive Beyond<br><span>Ordinary.</span></h1><p class="hero-text">Cinematic automotive artwork made for people who live for the details.</p><a class="primary-button" href="#shop">Explore the collection <span>↗</span></a><p class="microcopy">DIGITAL FILES · PERSONAL USE LICENSE</p></div>
+      <div class="hero-art" aria-label="Abstract automotive-inspired artwork"><div class="hero-ring"></div><div class="hero-line"></div><div class="hero-caption">01 / ELITEMOTION<br><span>FORM. POWER. PRESENCE.</span></div></div>
+    </section>
+    <section id="collection" class="collection-strip"><div><p class="eyebrow">CURATED SERIES</p><h2>Two moods.<br>One obsession.</h2></div><button class="collection-tile gold-tile" data-collection="Black & Gold"><span>01</span><strong>BLACK <i>&</i> GOLD</strong><small>Bold contrast · Refined detail</small></button><button class="collection-tile mono-tile" data-collection="Black & White"><span>02</span><strong>BLACK <i>&</i> WHITE</strong><small>Timeless monochrome</small></button></section>
+    <section id="shop" class="shop-section"><div class="section-heading"><div><p class="eyebrow">THE DIGITAL GARAGE</p><h2>Selected artwork<span class="red">.</span></h2></div><p>High-impact automotive posters.<br>Ready for your screen or personal print.</p></div>
+      <div class="shop-tools"><label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search cars, series, or product codes" aria-label="Search products"></label><select id="collection-filter" aria-label="Filter collection"><option value="all">All collections</option><option>Black & Gold</option><option>Black & White</option></select><select id="sort-select" aria-label="Sort products"><option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Name: A–Z</option></select></div>
+      <p id="product-status" class="status-line" aria-live="polite">Loading collection…</p><div id="product-grid" class="product-grid"></div>
+    </section>
+    <section id="about" class="about-section"><p class="eyebrow">THE ELITEMOTION STANDARD</p><h2>Built around the<br>beauty of the machine.</h2><p>ELITEMOTION is an independent automotive art label focused on digital poster files, considered composition, and the character of iconic machines.</p><div class="about-points"><div><b>01</b><span>Digital artwork</span></div><div><b>02</b><span>Personal-use license</span></div><div><b>03</b><span>Curated collections</span></div></div></section>
+  </main>
+  <footer><a class="footer-brand" href="/">ELITEMOTION<span class="red">.</span></a><span>© <span id="year"></span> ELITEMOTION. Digital automotive art.</span><a href="/admin">Admin</a></footer>
+  <div id="cart-backdrop" class="cart-backdrop" hidden></div><aside id="cart-panel" class="cart-panel" aria-label="Shopping bag" aria-hidden="true"><div class="cart-heading"><div><p class="eyebrow">YOUR SELECTION</p><h2>Your bag</h2></div><button id="cart-close" class="close-button" aria-label="Close bag">×</button></div><div id="cart-items" class="cart-items"></div><div class="cart-footer"><div class="cart-total"><span>Subtotal</span><strong id="cart-total">0</strong></div><p class="checkout-note">Checkout and online payment are not enabled yet. No payment will be taken.</p><button id="checkout-button" class="primary-button full-width" type="button">Checkout unavailable</button></div></aside>
+</body>
+</html>
